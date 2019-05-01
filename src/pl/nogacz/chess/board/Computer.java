@@ -17,6 +17,8 @@ public class Computer {
     public void getGameData() {
         cacheBoard = new HashMap<>(Board.getBoard());
 
+        possibleMoves.clear();
+
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
             if(entry.getValue().getColor().equals(PawnColor.black)) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
