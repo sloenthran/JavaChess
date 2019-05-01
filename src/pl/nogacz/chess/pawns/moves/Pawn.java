@@ -34,17 +34,17 @@ public class Pawn implements PawnMovesInterface{
 
         if(!Board.isFieldNotNull(new Coordinates(coordinates.getX(), y))) {
             possibleMoves.add(new Coordinates(coordinates.getX(), y));
-        } else {
-            if(Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
-                if(!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
-                    possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
-                }
-            }
+        }
 
-            if(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
-                if(!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
-                    possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
-                }
+        if(Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
+            if(!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
+                possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
+            }
+        }
+
+        if(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
+            if(!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
+                possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
             }
         }
     }
