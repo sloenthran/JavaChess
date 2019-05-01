@@ -38,7 +38,6 @@ public class King implements PawnMovesInterface {
         checkCoordinates(coordinates.getX() - 1, coordinates.getY() + 1);
     }
 
-    //TODO Król musi uwzględniać że nie może zostać zbity...
     private void checkCoordinates(int x, int y) {
         if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
             if(!isEnemyKickField(new Coordinates(x, y))) {
