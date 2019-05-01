@@ -26,6 +26,10 @@ public class Board {
         addStartPawn();
     }
 
+    public static HashMap<Coordinates, PawnClass> getBoard() {
+        return board;
+    }
+
     public void addStartPawn() {
         board.put(new Coordinates(0,0), new PawnClass(Pawn.Rook, PawnColor.black));
         board.put(new Coordinates(1,0), new PawnClass(Pawn.Knight, PawnColor.black));
@@ -112,6 +116,22 @@ public class Board {
     public static PawnClass getPawn(Coordinates coordinates) {
         PawnClass pawn = board.get(coordinates);
         return pawn;
+    }
+
+    public static PawnClass addPawnWithoutDesign(Coordinates coordinates, PawnClass pawn) {
+        PawnClass oldPawn = null;
+
+        if(isFieldNotNull(coordinates)) {
+            oldPawn = getPawn(coordinates);
+            board.remove(coordinates);
+        }
+
+        board.put(coordinates, pawn);
+        return oldPawn;
+    }
+
+    public static void removePawnWithoutDesign(Coordinates coordinates) {
+        board.remove(coordinates);
     }
 
     public void movePawn(Coordinates oldCoordinates, Coordinates newCoordinates) {
