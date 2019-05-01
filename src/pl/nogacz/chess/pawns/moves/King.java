@@ -39,7 +39,7 @@ public class King implements PawnMovesInterface {
     }
 
     //TODO Król musi uwzględniać że nie może zostać zbity...
-    private boolean checkCoordinates(int x, int y) {
+    private void checkCoordinates(int x, int y) {
         if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
             if(!isEnemyKickField(new Coordinates(x, y))) {
                 if (Board.isFieldNotNull(new Coordinates(x, y))) {
@@ -50,12 +50,9 @@ public class King implements PawnMovesInterface {
                     }
                 } else {
                     possibleMoves.add(new Coordinates(x, y));
-                    return true;
                 }
             }
         }
-
-        return false;
     }
 
     private boolean isEnemyKickField(Coordinates coordinates) {
