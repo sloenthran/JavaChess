@@ -17,6 +17,9 @@ import java.util.Set;
 public class Board {
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
 
+    private Computer computer = new Computer();
+    private boolean isComputerRound = false;
+
     private boolean isSelected = false;
     private Coordinates selectedCoordinates;
     private Set<Coordinates> possibleMoves;
@@ -62,7 +65,7 @@ public class Board {
     public void readMouseEvent(MouseEvent event) {
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
 
-        if(eventCoordinates.getX() <= 7 && eventCoordinates.getY() <= 7) {
+        if(eventCoordinates.getX() <= 7 && eventCoordinates.getY() <= 7 && !isComputerRound) {
             if(isSelected) {
                 if(eventCoordinates.getX() == selectedCoordinates.getX() && eventCoordinates.getY() == selectedCoordinates.getY()) {
                     selectedCoordinates = null;
@@ -74,12 +77,17 @@ public class Board {
 
                     selectedCoordinates = null;
                     isSelected = false;
+
+                    isComputerRound = true;
+                    computer.getGameData();
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
-                    selectedCoordinates = eventCoordinates;
-                    isSelected = true;
-                    lightSelect(eventCoordinates);
+                    if(getPawn(eventCoordinates).getColor().equals(PawnColor.white)) {
+                        selectedCoordinates = eventCoordinates;
+                        isSelected = true;
+                        lightSelect(eventCoordinates);
+                    }
                 }
             }
         }
