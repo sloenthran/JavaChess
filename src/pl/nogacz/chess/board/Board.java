@@ -1,5 +1,8 @@
 package pl.nogacz.chess.board;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.Design;
 import pl.nogacz.chess.pawns.Pawn;
@@ -78,8 +81,7 @@ public class Board {
                     selectedCoordinates = null;
                     isSelected = false;
 
-                    isComputerRound = true;
-                    computer.getGameData();
+                    computerMove();
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
@@ -91,7 +93,40 @@ public class Board {
                 }
             }
         }
+    }
 
+    public void computerMove() {
+        Task<Void> computerSleep = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+
+                return null;
+            }
+        };
+
+        computerSleep.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                Coordinates moveCoordinates = computer.chooseMove(selectedCoordinates);
+                unLightSelect(selectedCoordinates);
+                movePawn(selectedCoordinates, moveCoordinates);
+
+                isComputerRound = false;
+                selectedCoordinates = null;
+            }
+        });
+
+        isComputerRound = true;
+        computer.getGameData();
+        selectedCoordinates = computer.choosePawn();
+        lightSelect(selectedCoordinates);
+
+        new Thread(computerSleep).start();
     }
 
     public boolean isPossibleMove(Coordinates coordinates) {
