@@ -24,12 +24,12 @@ public class PawnClass {
     }
 
     public ImageView getImage() {
-        Image image = new Image("file:resources/pawns/"+ color +"_"+ pawn +".png");
+        Image image = new Image("file:resources/pawns/" + color + "_" + pawn + ".png");
         return new ImageView(image);
     }
 
     public ImageView getLightImage() {
-        Image image = new Image("file:resources/pawns/light_"+ color +"_"+ pawn +".png");
+        Image image = new Image("file:resources/pawns/light_" + color + "_" + pawn + ".png");
         return new ImageView(image);
     }
 }

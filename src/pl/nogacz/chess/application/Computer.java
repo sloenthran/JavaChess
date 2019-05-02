@@ -1,5 +1,7 @@
-package pl.nogacz.chess.board;
+package pl.nogacz.chess.application;
 
+import pl.nogacz.chess.board.Board;
+import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
 import pl.nogacz.chess.pawns.moves.PawnMoves;
@@ -12,25 +14,39 @@ import java.util.*;
 public class Computer {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private Random random = new Random();
+
+    private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
 
     public void getGameData() {
         cacheBoard = new HashMap<>(Board.getBoard());
 
         possibleMoves.clear();
+        possibleKick.clear();
 
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
             if(entry.getValue().getColor().equals(PawnColor.black)) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
-                if(moves.getPossibleMoves().size() > 0 || moves.getPossibleKick().size() > 0) {
+                if(moves.getPossibleMoves().size() > 0) {
                     possibleMoves.add(entry.getKey());
+                }
+
+                if(moves.getPossibleKick().size() > 0) {
+                    possibleKick.add(entry.getKey());
                 }
             }
         }
     }
 
     public Coordinates choosePawn() {
-        Object[] object = possibleMoves.toArray();
+        Object[] object = null;
+
+        if(possibleKick.size() > 0) {
+            object = possibleKick.toArray();
+        } else {
+            object = possibleMoves.toArray();
+        }
+
         return (Coordinates) object[random.nextInt(object.length)];
     }
 

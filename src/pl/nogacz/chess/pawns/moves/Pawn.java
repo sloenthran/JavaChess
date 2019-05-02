@@ -32,20 +32,31 @@ public class Pawn implements PawnMovesInterface{
             y = coordinates.getY() - 1;
         }
 
-        if(!Board.isFieldNotNull(new Coordinates(coordinates.getX(), y))) {
-            possibleMoves.add(new Coordinates(coordinates.getX(), y));
-        }
+        if(y <= 7 && y >= 0) {
+            if (!Board.isFieldNotNull(new Coordinates(coordinates.getX(), y))) {
+                isPossiblePromote(new Coordinates(coordinates.getX(), y), pawn);
+                possibleMoves.add(new Coordinates(coordinates.getX(), y));
+            }
 
-        if(Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
-            if(!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
-                possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
+            if (Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
+                if (!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
+                    possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
+                }
+            }
+
+            if (Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
+                if (!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
+                    possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
+                }
             }
         }
+    }
 
-        if(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
-            if(!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
-                possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
-            }
+    public void isPossiblePromote(Coordinates coordinates, PawnClass pawn) {
+        if(pawn.getColor().equals(PawnColor.black) && coordinates.getY() == 7) {
+            Board.setPossiblePromote(coordinates);
+        } else if(pawn.getColor().equals(PawnColor.white) && coordinates.getY() == 0) {
+            Board.setPossiblePromote(coordinates);
         }
     }
 

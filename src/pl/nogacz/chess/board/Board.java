@@ -4,10 +4,12 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import pl.nogacz.chess.application.Computer;
 import pl.nogacz.chess.application.Design;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
+import pl.nogacz.chess.pawns.PawnPromote;
 import pl.nogacz.chess.pawns.moves.PawnMoves;
 
 import java.util.HashMap;
@@ -23,6 +25,9 @@ public class Board {
     private Computer computer = new Computer();
     private boolean isComputerRound = false;
 
+    private PawnPromote pawnPromote = new PawnPromote();
+    private static Coordinates possiblePromote;
+
     private boolean isSelected = false;
     private Coordinates selectedCoordinates;
     private Set<Coordinates> possibleMoves;
@@ -34,6 +39,14 @@ public class Board {
 
     public static HashMap<Coordinates, PawnClass> getBoard() {
         return board;
+    }
+
+    public static Coordinates getPossiblePromote() {
+        return possiblePromote;
+    }
+
+    public static void setPossiblePromote(Coordinates possiblePromote) {
+        Board.possiblePromote = possiblePromote;
     }
 
     public void addStartPawn() {
@@ -81,11 +94,17 @@ public class Board {
                     selectedCoordinates = null;
                     isSelected = false;
 
+                    if(possiblePromote != null && possiblePromote.equals(eventCoordinates)) {
+                        pawnPromote.userPromote(eventCoordinates);
+                    }
+
                     computerMove();
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
                     if(getPawn(eventCoordinates).getColor().equals(PawnColor.white)) {
+                        possiblePromote = null;
+
                         selectedCoordinates = eventCoordinates;
                         isSelected = true;
                         lightSelect(eventCoordinates);
@@ -124,6 +143,7 @@ public class Board {
         isComputerRound = true;
         computer.getGameData();
         selectedCoordinates = computer.choosePawn();
+
         lightSelect(selectedCoordinates);
 
         new Thread(computerSleep).start();
@@ -171,6 +191,18 @@ public class Board {
 
         board.put(coordinates, pawn);
         return oldPawn;
+    }
+
+    public static void promotePawn(Coordinates coordinates, Pawn pawn) {
+
+        PawnClass oldPawn = getPawn(coordinates);
+        PawnClass newPawn = new PawnClass(pawn, oldPawn.getColor());
+
+        board.remove(coordinates);
+        board.put(coordinates, newPawn);
+
+        Design.removePawn(coordinates);
+        Design.addPawn(coordinates, newPawn);
     }
 
     public static void removePawnWithoutDesign(Coordinates coordinates) {
