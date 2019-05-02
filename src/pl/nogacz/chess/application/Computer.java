@@ -2,6 +2,7 @@ package pl.nogacz.chess.application;
 
 import pl.nogacz.chess.board.Board;
 import pl.nogacz.chess.board.Coordinates;
+import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
 import pl.nogacz.chess.pawns.moves.PawnMoves;
@@ -36,6 +37,15 @@ public class Computer {
                 }
             }
         }
+
+        Coordinates possiblePromote = Board.getPossiblePromote();
+
+        if(possiblePromote != null) {
+            possibleMoves.clear();
+            possibleKick.clear();
+
+            possibleMoves.add(possiblePromote);
+        }
     }
 
     public Coordinates choosePawn() {
@@ -54,12 +64,17 @@ public class Computer {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        if(moves.getPossibleKick().size() > 0) {
-            Object[] object = moves.getPossibleKick().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+        if(Board.getPossiblePromote() == null) {
+            if (moves.getPossibleKick().size() > 0) {
+                Object[] object = moves.getPossibleKick().toArray();
+                return (Coordinates) object[random.nextInt(object.length)];
+            } else {
+                Object[] object = moves.getPossibleMoves().toArray();
+                return (Coordinates) object[random.nextInt(object.length)];
+            }
         } else {
             Object[] object = moves.getPossibleMoves().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            return (Coordinates) object[0];
         }
     }
 }

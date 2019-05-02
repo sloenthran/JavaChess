@@ -94,7 +94,7 @@ public class Board {
                     selectedCoordinates = null;
                     isSelected = false;
 
-                    if(possiblePromote != null && possiblePromote.equals(eventCoordinates)) {
+                    if(possiblePromote.equals(eventCoordinates)) {
                         pawnPromote.userPromote(eventCoordinates);
                     }
 
@@ -137,6 +137,10 @@ public class Board {
 
                 isComputerRound = false;
                 selectedCoordinates = null;
+
+                if(possiblePromote.equals(moveCoordinates)) {
+                    pawnPromote.computerPromote(moveCoordinates);
+                }
             }
         });
 
