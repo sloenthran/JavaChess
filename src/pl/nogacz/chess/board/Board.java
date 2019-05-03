@@ -294,6 +294,7 @@ public class Board {
     private void unLightSelect(Coordinates coordinates) {
         possibleMoves.forEach(this::unLightMove);
         possibleKick.forEach(this::unLightPawn);
+
         possibleCheck.forEach(this::unLightPawn);
 
         unLightPawn(coordinates);
@@ -301,8 +302,11 @@ public class Board {
 
     private void unLightPawn(Coordinates coordinates) {
         PawnClass pawn = getPawn(coordinates);
-        Design.removePawn(coordinates);
-        Design.addPawn(coordinates, pawn);
+
+        if(pawn != null) {
+            Design.removePawn(coordinates);
+            Design.addPawn(coordinates, pawn);
+        }
     }
 
     private void unLightMove(Coordinates coordinates) {

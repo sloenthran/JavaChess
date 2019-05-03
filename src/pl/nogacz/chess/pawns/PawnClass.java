@@ -34,7 +34,6 @@ public class PawnClass {
     }
 
     public ImageView getCheckedImage() {
-        System.out.println("OK");
         Image image = new Image("file:resources/pawns/check_white_King.png");
         return new ImageView(image);
     }

@@ -25,9 +25,13 @@ public class PawnPromote {
 
         Optional<Pawn> result = dialog.showAndWait();
 
-        if (result.isPresent()) {
-            Board.promotePawn(coordinates, result.get());
+        Pawn choice = Pawn.Queen;
+
+        if(result.isPresent()) {
+            choice = result.get();
         }
+
+        Board.promotePawn(coordinates, choice);
     }
 
     public void computerPromote(Coordinates coordinates) {

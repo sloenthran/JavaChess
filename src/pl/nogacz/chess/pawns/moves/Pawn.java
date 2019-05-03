@@ -75,7 +75,6 @@ public class Pawn implements PawnMovesInterface{
                 } else {
                     possibleKick.add(coordinates);
                 }
-                possibleKick.add(coordinates);
             }
         }
     }

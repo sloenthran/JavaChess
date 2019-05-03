@@ -66,7 +66,11 @@ public class Rook implements PawnMovesInterface{
                 }
             } else {
                 if(checked) {
-                    possibleCheck.add(new Coordinates(x, y));
+                    if(!Board.isFieldNotNull(new Coordinates(x, y))) {
+                        possibleCheck.add(new Coordinates(x, y));
+                    } else {
+                        return false;
+                    }
                 } else {
                     possibleMoves.add(new Coordinates(x, y));
                 }
