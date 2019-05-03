@@ -52,7 +52,7 @@ public class Bishop implements PawnMovesInterface {
 
     private boolean checkCoordinates(int x, int y) {
         if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
-            if(Board.isFieldNotNull(new Coordinates(x, y))) {
+            if(Board.isFieldNotNull(new Coordinates(x, y)) && !checked) {
                 PawnClass pawn = Board.getPawn(coordinates);
 
                 if(!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
