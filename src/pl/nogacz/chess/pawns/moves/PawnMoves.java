@@ -29,6 +29,8 @@ public class PawnMoves {
         return pawnMoves.getPossibleKick();
     }
 
+    public Set<Coordinates> getPossibleCheck() { return pawnMoves.getPossibleCheck(); }
+
     public Pawn getPawn() {
         return pawn.getPawn();
     }

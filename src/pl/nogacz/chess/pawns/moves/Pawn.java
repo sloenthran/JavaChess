@@ -14,6 +14,7 @@ import java.util.Set;
 public class Pawn implements PawnMovesInterface{
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
+    private Set<Coordinates> possibleCheck = new HashSet<>();
     private Set<Coordinates> possibleMovePromote = new HashSet<>();
     private Set<Coordinates> possibleKickPromote = new HashSet<>();
     private Coordinates coordinates;
@@ -40,19 +41,8 @@ public class Pawn implements PawnMovesInterface{
                 possibleMoves.add(new Coordinates(coordinates.getX(), y));
             }
 
-            if (Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
-                if (!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
-                    isPossibleKickPromote(new Coordinates(coordinates.getX() - 1, y), pawn);
-                    possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
-                }
-            }
-
-            if (Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
-                if (!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
-                    isPossibleKickPromote(new Coordinates(coordinates.getX() + 1, y), pawn);
-                    possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
-                }
-            }
+            checkField(new Coordinates(coordinates.getX() - 1, y), pawn);
+            checkField(new Coordinates(coordinates.getX() + 1, y), pawn);
         }
 
         Board.addPossibleMovePromote(possibleMovePromote);
@@ -75,6 +65,21 @@ public class Pawn implements PawnMovesInterface{
         }
     }
 
+    public void checkField(Coordinates coordinates, PawnClass pawn) {
+        if (Board.isFieldNotNull(coordinates)) {
+            if (!Board.isThisSameColor(coordinates, pawn.getColor())) {
+                isPossibleKickPromote(coordinates, pawn);
+
+                if(Board.isKing(coordinates)) {
+                    possibleCheck.add(coordinates);
+                } else {
+                    possibleKick.add(coordinates);
+                }
+                possibleKick.add(coordinates);
+            }
+        }
+    }
+
     @Override
     public Set<Coordinates> getPossibleMoves() {
         return possibleMoves;
@@ -83,5 +88,10 @@ public class Pawn implements PawnMovesInterface{
     @Override
     public Set<Coordinates> getPossibleKick() {
         return possibleKick;
+    }
+
+    @Override
+    public Set<Coordinates> getPossibleCheck() {
+        return possibleCheck;
     }
 }

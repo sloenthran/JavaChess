@@ -37,8 +37,6 @@ public class Computer {
                 }
             }
         }
-
-        checkPromote();
     }
 
     public Coordinates choosePawn() {
@@ -63,24 +61,6 @@ public class Computer {
         } else {
             Object[] object = moves.getPossibleMoves().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
-        }
-    }
-
-    private void checkPromote() {
-        Set<Coordinates> possibleMovePromote = Board.getPossibleMovePromote();
-        Set<Coordinates> possibleKickPromote = Board.getPossibleKickPromote();
-
-        if(possibleMovePromote.size() > 0) {
-            possibleMoves.clear();
-            possibleKick.clear();
-
-            possibleMoves.addAll(possibleMovePromote);
-        }
-
-        if(possibleKickPromote.size() > 0) {
-            possibleKick.clear();
-
-            possibleKick.addAll(possibleKickPromote);
         }
     }
 }

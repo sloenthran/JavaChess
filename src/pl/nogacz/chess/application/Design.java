@@ -56,6 +56,10 @@ public class Design {
         grid.add(pawn.getLightImage(), coordinates.getX(), coordinates.getY());
     }
 
+    public static void addCheckedPawn(Coordinates coordinates, PawnClass pawn) {
+        grid.add(pawn.getCheckedImage(), coordinates.getX(), coordinates.getY());
+    }
+
     public static void addLightMove(Coordinates coordinates) {
         grid.add(new ImageView(lightMove), coordinates.getX(), coordinates.getY());
     }

@@ -32,4 +32,10 @@ public class PawnClass {
         Image image = new Image("file:resources/pawns/light_" + color + "_" + pawn + ".png");
         return new ImageView(image);
     }
+
+    public ImageView getCheckedImage() {
+        System.out.println("OK");
+        Image image = new Image("file:resources/pawns/check_white_King.png");
+        return new ImageView(image);
+    }
 }

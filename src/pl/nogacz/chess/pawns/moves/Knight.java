@@ -13,6 +13,7 @@ import java.util.Set;
 public class Knight implements PawnMovesInterface {
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
+    private Set<Coordinates> possibleCheck = new HashSet<>();
     private Coordinates coordinates;
 
     @Override
@@ -38,7 +39,11 @@ public class Knight implements PawnMovesInterface {
                 PawnClass pawn = Board.getPawn(coordinates);
 
                 if(!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                    possibleKick.add(new Coordinates(x, y));
+                    if(Board.isKing(new Coordinates(x, y))) {
+                        possibleCheck.add(new Coordinates(x, y));
+                    } else {
+                        possibleKick.add(new Coordinates(x, y));
+                    }
                 }
             } else {
                 possibleMoves.add(new Coordinates(x, y));
@@ -54,5 +59,10 @@ public class Knight implements PawnMovesInterface {
     @Override
     public Set<Coordinates> getPossibleKick() {
         return possibleKick;
+    }
+
+    @Override
+    public Set<Coordinates> getPossibleCheck() {
+        return possibleCheck;
     }
 }

@@ -12,4 +12,5 @@ public interface PawnMovesInterface {
     void checkPossibleMoves();
     Set<Coordinates> getPossibleMoves();
     Set<Coordinates> getPossibleKick();
+    Set<Coordinates> getPossibleCheck();
 }

@@ -14,6 +14,7 @@ import java.util.Set;
 public class Queen implements PawnMovesInterface{
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
+    private Set<Coordinates> possibleCheck = new HashSet<>();
     private Coordinates coordinates;
     private PawnClass pawn;
 
@@ -35,6 +36,7 @@ public class Queen implements PawnMovesInterface{
 
         possibleMoves.addAll(moves.getPossibleMoves());
         possibleKick.addAll(moves.getPossibleKick());
+        possibleCheck.addAll(moves.getPossibleCheck());
     }
 
     private void addBishopMoves() {
@@ -42,6 +44,7 @@ public class Queen implements PawnMovesInterface{
 
         possibleMoves.addAll(moves.getPossibleMoves());
         possibleKick.addAll(moves.getPossibleKick());
+        possibleCheck.addAll(moves.getPossibleCheck());
     }
 
     @Override
@@ -52,5 +55,10 @@ public class Queen implements PawnMovesInterface{
     @Override
     public Set<Coordinates> getPossibleKick() {
         return possibleKick;
+    }
+
+    @Override
+    public Set<Coordinates> getPossibleCheck() {
+        return possibleCheck;
     }
 }

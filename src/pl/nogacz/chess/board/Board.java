@@ -34,6 +34,7 @@ public class Board {
     private Coordinates selectedCoordinates;
     private Set<Coordinates> possibleMoves;
     private Set<Coordinates> possibleKick;
+    private Set<Coordinates> possibleCheck;
 
     public Board() {
         addStartPawn();
@@ -59,7 +60,7 @@ public class Board {
         possibleKickPromote.addAll(coordinates);
     }
 
-    public void addStartPawn() {
+    private void addStartPawn() {
         board.put(new Coordinates(0,0), new PawnClass(Pawn.Rook, PawnColor.black));
         board.put(new Coordinates(1,0), new PawnClass(Pawn.Knight, PawnColor.black));
         board.put(new Coordinates(2,0), new PawnClass(Pawn.Bishop, PawnColor.black));
@@ -92,6 +93,7 @@ public class Board {
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
 
         if(eventCoordinates.getX() <= 7 && eventCoordinates.getY() <= 7 && !isComputerRound) {
+
             if(isSelected) {
                 if(eventCoordinates.getX() == selectedCoordinates.getX() && eventCoordinates.getY() == selectedCoordinates.getY()) {
                     selectedCoordinates = null;
@@ -104,7 +106,7 @@ public class Board {
                     selectedCoordinates = null;
                     isSelected = false;
 
-                    checkPromote(eventCoordinates, 1);
+                    checkPromote(eventCoordinates, 0);
 
                     computerMove();
                 }
@@ -123,7 +125,7 @@ public class Board {
         }
     }
 
-    public void computerMove() {
+    private void computerMove() {
         Task<Void> computerSleep = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -144,10 +146,10 @@ public class Board {
                 unLightSelect(selectedCoordinates);
                 movePawn(selectedCoordinates, moveCoordinates);
 
+                checkPromote(moveCoordinates, 1);
+
                 isComputerRound = false;
                 selectedCoordinates = null;
-
-                checkPromote(moveCoordinates, 1);
             }
         });
 
@@ -160,14 +162,16 @@ public class Board {
         new Thread(computerSleep).start();
     }
 
-    public void checkPromote(Coordinates coordinates, int type) {
-        if(type == 0) {
+    private void checkPromote(Coordinates coordinates, int type) {
+        PawnClass pawn = getPawn(coordinates);
+
+        if(type == 0 && pawn.getColor().equals(PawnColor.white)) {
             if(possibleMovePromote.contains(coordinates)) {
                 pawnPromote.userPromote(coordinates);
             } else if(possibleKickPromote.contains(coordinates)) {
                 pawnPromote.userPromote(coordinates);
             }
-        } else {
+        } else if(pawn.getColor().equals(PawnColor.black)) {
             if(possibleMovePromote.contains(coordinates)) {
                 pawnPromote.computerPromote(coordinates);
             } else if(possibleKickPromote.contains(coordinates)) {
@@ -176,7 +180,7 @@ public class Board {
         }
     }
 
-    public boolean isPossibleMove(Coordinates coordinates) {
+    private boolean isPossibleMove(Coordinates coordinates) {
         if(possibleMoves.contains(coordinates) || possibleKick.contains(coordinates)) {
             return true;
         }
@@ -197,6 +201,15 @@ public class Board {
     public static boolean isThisSameColor(Coordinates coordinates, PawnColor color) {
         PawnClass pawn = getPawn(coordinates);
         if(pawn.getColor().equals(color)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isKing(Coordinates coordinates) {
+        PawnClass pawn = getPawn(coordinates);
+        if(pawn.getPawn().equals(Pawn.King)) {
             return true;
         } else {
             return false;
@@ -236,7 +249,7 @@ public class Board {
         board.remove(coordinates);
     }
 
-    public void movePawn(Coordinates oldCoordinates, Coordinates newCoordinates) {
+    private void movePawn(Coordinates oldCoordinates, Coordinates newCoordinates) {
         PawnClass pawn = getPawn(oldCoordinates);
         Design.removePawn(oldCoordinates);
         Design.removePawn(newCoordinates);
@@ -246,42 +259,53 @@ public class Board {
         board.put(newCoordinates, pawn);
     }
 
-    public void lightSelect(Coordinates coordinates) {
+    private void lightSelect(Coordinates coordinates) {
         PawnMoves pawnMoves = new PawnMoves(getPawn(coordinates), coordinates);
 
         possibleMoves = pawnMoves.getPossibleMoves();
         possibleKick = pawnMoves.getPossibleKick();
+        possibleCheck = pawnMoves.getPossibleCheck();
 
         possibleMoves.forEach(this::lightMove);
         possibleKick.forEach(this::lightPawn);
+        possibleCheck.forEach(this::checkedPawn);
 
         lightPawn(coordinates);
     }
 
-    public void lightPawn(Coordinates coordinates) {
+    private void lightPawn(Coordinates coordinates) {
         PawnClass pawn = getPawn(coordinates);
         Design.removePawn(coordinates);
         Design.addLightPawn(coordinates, pawn);
     }
 
-    public void lightMove(Coordinates coordinates) {
+    private void checkedPawn(Coordinates coordinates) {
+        PawnClass pawn = getPawn(coordinates);
+        if(pawn != null) {
+            Design.removePawn(coordinates);
+            Design.addCheckedPawn(coordinates, pawn);
+        }
+    }
+
+    private void lightMove(Coordinates coordinates) {
         Design.addLightMove(coordinates);
     }
 
-    public void unLightSelect(Coordinates coordinates) {
+    private void unLightSelect(Coordinates coordinates) {
         possibleMoves.forEach(this::unLightMove);
         possibleKick.forEach(this::unLightPawn);
+        possibleCheck.forEach(this::unLightPawn);
 
         unLightPawn(coordinates);
     }
 
-    public void unLightPawn(Coordinates coordinates) {
+    private void unLightPawn(Coordinates coordinates) {
         PawnClass pawn = getPawn(coordinates);
         Design.removePawn(coordinates);
         Design.addPawn(coordinates, pawn);
     }
 
-    public void unLightMove(Coordinates coordinates) {
+    private void unLightMove(Coordinates coordinates) {
         Design.removePawn(coordinates);
     }
 }

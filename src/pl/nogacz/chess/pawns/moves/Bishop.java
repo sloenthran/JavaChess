@@ -13,6 +13,10 @@ import java.util.Set;
 public class Bishop implements PawnMovesInterface {
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
+
+    private Set<Coordinates> possibleCheck = new HashSet<>();
+    private boolean checked = false;
+
     private Coordinates coordinates;
 
     @Override
@@ -52,10 +56,21 @@ public class Bishop implements PawnMovesInterface {
                 PawnClass pawn = Board.getPawn(coordinates);
 
                 if(!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                    possibleKick.add(new Coordinates(x, y));
+                    if(Board.isKing(new Coordinates(x, y))) {
+                        possibleCheck.add(new Coordinates(x, y));
+                        checked = true;
+                        return true;
+                    } else {
+                        possibleKick.add(new Coordinates(x, y));
+                    };
                 }
             } else {
-                possibleMoves.add(new Coordinates(x, y));
+                if(checked) {
+                    possibleCheck.add(new Coordinates(x, y));
+                } else {
+                    possibleMoves.add(new Coordinates(x, y));
+                }
+
                 return true;
             }
         }
@@ -71,5 +86,10 @@ public class Bishop implements PawnMovesInterface {
     @Override
     public Set<Coordinates> getPossibleKick() {
         return possibleKick;
+    }
+
+    @Override
+    public Set<Coordinates> getPossibleCheck() {
+        return possibleCheck;
     }
 }

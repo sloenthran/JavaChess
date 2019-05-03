@@ -16,6 +16,7 @@ public class King implements PawnMovesInterface {
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleEnemyKick = new HashSet<>();
+    private Set<Coordinates> possibleCheck = new HashSet<>();
     private Coordinates coordinates;
     private PawnClass pawn;
 
@@ -45,7 +46,11 @@ public class King implements PawnMovesInterface {
                     PawnClass pawn = Board.getPawn(coordinates);
 
                     if (!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                        possibleKick.add(new Coordinates(x, y));
+                        if(Board.isKing(new Coordinates(x, y))) {
+                            possibleCheck.add(new Coordinates(x, y));
+                        } else {
+                            possibleKick.add(new Coordinates(x, y));
+                        }
                     }
                 } else {
                     possibleMoves.add(new Coordinates(x, y));
@@ -61,6 +66,7 @@ public class King implements PawnMovesInterface {
             if(!Board.isThisSameColor(entry.getKey(), pawn.getColor()) && !entry.getValue().getPawn().equals(Pawn.King)) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
                 possibleEnemyKick.addAll(moves.getPossibleKick());
+                possibleEnemyKick.addAll(moves.getPossibleCheck());
             }
         }
 
@@ -85,5 +91,10 @@ public class King implements PawnMovesInterface {
     @Override
     public Set<Coordinates> getPossibleKick() {
         return possibleKick;
+    }
+
+    @Override
+    public Set<Coordinates> getPossibleCheck() {
+        return possibleCheck;
     }
 }
