@@ -38,14 +38,7 @@ public class Computer {
             }
         }
 
-        Coordinates possiblePromote = Board.getPossiblePromote();
-
-        if(possiblePromote != null) {
-            possibleMoves.clear();
-            possibleKick.clear();
-
-            possibleMoves.add(possiblePromote);
-        }
+        checkPromote();
     }
 
     public Coordinates choosePawn() {
@@ -64,17 +57,30 @@ public class Computer {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        if(Board.getPossiblePromote() == null) {
-            if (moves.getPossibleKick().size() > 0) {
-                Object[] object = moves.getPossibleKick().toArray();
-                return (Coordinates) object[random.nextInt(object.length)];
-            } else {
-                Object[] object = moves.getPossibleMoves().toArray();
-                return (Coordinates) object[random.nextInt(object.length)];
-            }
+        if(moves.getPossibleKick().size() > 0) {
+            Object[] object = moves.getPossibleKick().toArray();
+            return (Coordinates) object[random.nextInt(object.length)];
         } else {
             Object[] object = moves.getPossibleMoves().toArray();
-            return (Coordinates) object[0];
+            return (Coordinates) object[random.nextInt(object.length)];
+        }
+    }
+
+    private void checkPromote() {
+        Set<Coordinates> possibleMovePromote = Board.getPossibleMovePromote();
+        Set<Coordinates> possibleKickPromote = Board.getPossibleKickPromote();
+
+        if(possibleMovePromote.size() > 0) {
+            possibleMoves.clear();
+            possibleKick.clear();
+
+            possibleMoves.addAll(possibleMovePromote);
+        }
+
+        if(possibleKickPromote.size() > 0) {
+            possibleKick.clear();
+
+            possibleKick.addAll(possibleKickPromote);
         }
     }
 }

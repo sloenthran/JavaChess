@@ -14,6 +14,8 @@ import java.util.Set;
 public class Pawn implements PawnMovesInterface{
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKick = new HashSet<>();
+    private Set<Coordinates> possibleMovePromote = new HashSet<>();
+    private Set<Coordinates> possibleKickPromote = new HashSet<>();
     private Coordinates coordinates;
 
     @Override
@@ -34,29 +36,42 @@ public class Pawn implements PawnMovesInterface{
 
         if(y <= 7 && y >= 0) {
             if (!Board.isFieldNotNull(new Coordinates(coordinates.getX(), y))) {
-                isPossiblePromote(new Coordinates(coordinates.getX(), y), pawn);
+                isPossibleMovePromote(new Coordinates(coordinates.getX(), y), pawn);
                 possibleMoves.add(new Coordinates(coordinates.getX(), y));
             }
 
             if (Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, y))) {
                 if (!Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, y), pawn.getColor())) {
+                    isPossibleKickPromote(new Coordinates(coordinates.getX() - 1, y), pawn);
                     possibleKick.add(new Coordinates(coordinates.getX() - 1, y));
                 }
             }
 
             if (Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, y))) {
                 if (!Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, y), pawn.getColor())) {
+                    isPossibleKickPromote(new Coordinates(coordinates.getX() + 1, y), pawn);
                     possibleKick.add(new Coordinates(coordinates.getX() + 1, y));
                 }
             }
         }
+
+        Board.addPossibleMovePromote(possibleMovePromote);
+        Board.addPossibleKickPromote(possibleKickPromote);
     }
 
-    public void isPossiblePromote(Coordinates coordinates, PawnClass pawn) {
+    public void isPossibleMovePromote(Coordinates coordinates, PawnClass pawn) {
         if(pawn.getColor().equals(PawnColor.black) && coordinates.getY() == 7) {
-            Board.setPossiblePromote(coordinates);
+            possibleMovePromote.add(coordinates);
         } else if(pawn.getColor().equals(PawnColor.white) && coordinates.getY() == 0) {
-            Board.setPossiblePromote(coordinates);
+            possibleMovePromote.add(coordinates);
+        }
+    }
+
+    public void isPossibleKickPromote(Coordinates coordinates, PawnClass pawn) {
+        if(pawn.getColor().equals(PawnColor.black) && coordinates.getY() == 7) {
+            possibleKickPromote.add(coordinates);
+        } else if(pawn.getColor().equals(PawnColor.white) && coordinates.getY() == 0) {
+            possibleKickPromote.add(coordinates);
         }
     }
 

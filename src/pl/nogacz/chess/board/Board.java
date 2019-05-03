@@ -13,6 +13,7 @@ import pl.nogacz.chess.pawns.PawnPromote;
 import pl.nogacz.chess.pawns.moves.PawnMoves;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,7 +27,8 @@ public class Board {
     private boolean isComputerRound = false;
 
     private PawnPromote pawnPromote = new PawnPromote();
-    private static Coordinates possiblePromote;
+    private static Set<Coordinates> possibleMovePromote = new HashSet<>();
+    private static Set<Coordinates> possibleKickPromote = new HashSet<>();
 
     private boolean isSelected = false;
     private Coordinates selectedCoordinates;
@@ -41,12 +43,20 @@ public class Board {
         return board;
     }
 
-    public static Coordinates getPossiblePromote() {
-        return possiblePromote;
+    public static Set<Coordinates> getPossibleMovePromote() {
+        return possibleMovePromote;
     }
 
-    public static void setPossiblePromote(Coordinates possiblePromote) {
-        Board.possiblePromote = possiblePromote;
+    public static void addPossibleMovePromote(Set<Coordinates> coordinates) {
+        possibleMovePromote.addAll(coordinates);
+    }
+
+    public static Set<Coordinates> getPossibleKickPromote() {
+        return possibleKickPromote;
+    }
+
+    public static void addPossibleKickPromote(Set<Coordinates> coordinates) {
+        possibleKickPromote.addAll(coordinates);
     }
 
     public void addStartPawn() {
@@ -94,16 +104,15 @@ public class Board {
                     selectedCoordinates = null;
                     isSelected = false;
 
-                    if(possiblePromote.equals(eventCoordinates)) {
-                        pawnPromote.userPromote(eventCoordinates);
-                    }
+                    checkPromote(eventCoordinates, 1);
 
                     computerMove();
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
                     if(getPawn(eventCoordinates).getColor().equals(PawnColor.white)) {
-                        possiblePromote = null;
+                        possibleMovePromote.clear();
+                        possibleKickPromote.clear();
 
                         selectedCoordinates = eventCoordinates;
                         isSelected = true;
@@ -138,9 +147,7 @@ public class Board {
                 isComputerRound = false;
                 selectedCoordinates = null;
 
-                if(possiblePromote.equals(moveCoordinates)) {
-                    pawnPromote.computerPromote(moveCoordinates);
-                }
+                checkPromote(moveCoordinates, 1);
             }
         });
 
@@ -151,6 +158,22 @@ public class Board {
         lightSelect(selectedCoordinates);
 
         new Thread(computerSleep).start();
+    }
+
+    public void checkPromote(Coordinates coordinates, int type) {
+        if(type == 0) {
+            if(possibleMovePromote.contains(coordinates)) {
+                pawnPromote.userPromote(coordinates);
+            } else if(possibleKickPromote.contains(coordinates)) {
+                pawnPromote.userPromote(coordinates);
+            }
+        } else {
+            if(possibleMovePromote.contains(coordinates)) {
+                pawnPromote.computerPromote(coordinates);
+            } else if(possibleKickPromote.contains(coordinates)) {
+                pawnPromote.computerPromote(coordinates);
+            }
+        }
     }
 
     public boolean isPossibleMove(Coordinates coordinates) {
