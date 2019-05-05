@@ -2,6 +2,7 @@ package pl.nogacz.chess.pawns;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import pl.nogacz.chess.application.Resources;
 
 /**
  * @author Dawid Nogacz on 01.05.2019
@@ -24,17 +25,17 @@ public class PawnClass {
     }
 
     public ImageView getImage() {
-        Image image = new Image("file:resources/pawns/" + color + "_" + pawn + ".png");
+        Image image = new Image(Resources.getPath("pawns/" + color + "_" + pawn + ".png"));
         return new ImageView(image);
     }
 
     public ImageView getLightImage() {
-        Image image = new Image("file:resources/pawns/light_" + color + "_" + pawn + ".png");
+        Image image = new Image(Resources.getPath("pawns/light_" + color + "_" + pawn + ".png"));
         return new ImageView(image);
     }
 
     public ImageView getCheckedImage() {
-        Image image = new Image("file:resources/pawns/check_" + color + "_King.png");
+        Image image = new Image(Resources.getPath("pawns/check_" + color + "_King.png"));
         return new ImageView(image);
     }
 }

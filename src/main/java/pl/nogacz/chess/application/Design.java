@@ -14,7 +14,7 @@ import pl.nogacz.chess.pawns.PawnClass;
  */
 public class Design {
     private static GridPane grid = new GridPane();
-    private static Image lightMove = new Image("file:resources/light.png");
+    private static Image lightMove = new Image(Resources.getPath("light.png"));
 
     public Design() {
         createBackground();
@@ -26,7 +26,7 @@ public class Design {
     }
 
     private void createBackground() {
-        Image background = new Image("file:resources/board.png");
+        Image background = new Image(Resources.getPath("board.png"));
         BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
         BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
         grid.setBackground(new Background(backgroundImage));

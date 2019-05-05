@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pl.nogacz.chess.application.Design;
+import pl.nogacz.chess.application.Resources;
 import pl.nogacz.chess.board.Board;
 
 /**
