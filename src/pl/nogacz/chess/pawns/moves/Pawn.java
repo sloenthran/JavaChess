@@ -50,17 +50,17 @@ public class Pawn implements PawnMovesInterface{
     }
 
     public void isPossibleMovePromote(Coordinates coordinates, PawnClass pawn) {
-        if(pawn.getColor().equals(PawnColor.black) && coordinates.getY() == 7) {
+        if(pawn.getColor().isBlack() && coordinates.getY() == 7) {
             possibleMovePromote.add(coordinates);
-        } else if(pawn.getColor().equals(PawnColor.white) && coordinates.getY() == 0) {
+        } else if(pawn.getColor().isWhite() && coordinates.getY() == 0) {
             possibleMovePromote.add(coordinates);
         }
     }
 
     public void isPossibleKickPromote(Coordinates coordinates, PawnClass pawn) {
-        if(pawn.getColor().equals(PawnColor.black) && coordinates.getY() == 7) {
+        if(pawn.getColor().isBlack() && coordinates.getY() == 7) {
             possibleKickPromote.add(coordinates);
-        } else if(pawn.getColor().equals(PawnColor.white) && coordinates.getY() == 0) {
+        } else if(pawn.getColor().isWhite() && coordinates.getY() == 0) {
             possibleKickPromote.add(coordinates);
         }
     }
@@ -70,7 +70,7 @@ public class Pawn implements PawnMovesInterface{
             if (!Board.isThisSameColor(coordinates, pawn.getColor())) {
                 isPossibleKickPromote(coordinates, pawn);
 
-                if(Board.isKing(coordinates)) {
+                if(pawn.getPawn().isKing()) {
                     possibleCheck.add(coordinates);
                 } else {
                     possibleKick.add(coordinates);

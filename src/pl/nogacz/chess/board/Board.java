@@ -92,10 +92,10 @@ public class Board {
     public void readMouseEvent(MouseEvent event) {
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
 
-        if(eventCoordinates.getX() <= 7 && eventCoordinates.getY() <= 7 && !isComputerRound) {
+        if(eventCoordinates.isValid() && !isComputerRound) {
 
             if(isSelected) {
-                if(eventCoordinates.getX() == selectedCoordinates.getX() && eventCoordinates.getY() == selectedCoordinates.getY()) {
+                if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;
                     isSelected = false;
                     unLightSelect(eventCoordinates);
@@ -112,7 +112,7 @@ public class Board {
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
-                    if(getPawn(eventCoordinates).getColor().equals(PawnColor.white)) {
+                    if(getPawn(eventCoordinates).getColor().isWhite()) {
                         possibleMovePromote.clear();
                         possibleKickPromote.clear();
 
@@ -165,13 +165,13 @@ public class Board {
     private void checkPromote(Coordinates coordinates, int type) {
         PawnClass pawn = getPawn(coordinates);
 
-        if(type == 0 && pawn.getColor().equals(PawnColor.white)) {
+        if(type == 0 && pawn.getColor().isWhite()) {
             if(possibleMovePromote.contains(coordinates)) {
                 pawnPromote.userPromote(coordinates);
             } else if(possibleKickPromote.contains(coordinates)) {
                 pawnPromote.userPromote(coordinates);
             }
-        } else if(pawn.getColor().equals(PawnColor.black)) {
+        } else if(pawn.getColor().isBlack()) {
             if(possibleMovePromote.contains(coordinates)) {
                 pawnPromote.computerPromote(coordinates);
             } else if(possibleKickPromote.contains(coordinates)) {
@@ -181,39 +181,17 @@ public class Board {
     }
 
     private boolean isPossibleMove(Coordinates coordinates) {
-        if(possibleMoves.contains(coordinates) || possibleKick.contains(coordinates)) {
-            return true;
-        }
-
-        return false;
+        return possibleMoves.contains(coordinates) || possibleKick.contains(coordinates);
     }
 
     public static boolean isFieldNotNull(Coordinates coordinates) {
         PawnClass pawn = getPawn(coordinates);
-
-        if(pawn != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return pawn != null;
     }
 
     public static boolean isThisSameColor(Coordinates coordinates, PawnColor color) {
         PawnClass pawn = getPawn(coordinates);
-        if(pawn.getColor().equals(color)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean isKing(Coordinates coordinates) {
-        PawnClass pawn = getPawn(coordinates);
-        if(pawn.getPawn().equals(Pawn.King)) {
-            return true;
-        } else {
-            return false;
-        }
+        return pawn.getColor() == color;
     }
 
     public static PawnClass getPawn(Coordinates coordinates) {
@@ -234,7 +212,6 @@ public class Board {
     }
 
     public static void promotePawn(Coordinates coordinates, Pawn pawn) {
-
         PawnClass oldPawn = getPawn(coordinates);
         PawnClass newPawn = new PawnClass(pawn, oldPawn.getColor());
 

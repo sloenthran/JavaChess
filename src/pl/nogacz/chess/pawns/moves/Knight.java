@@ -15,6 +15,7 @@ public class Knight implements PawnMovesInterface {
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleCheck = new HashSet<>();
     private Coordinates coordinates;
+    private PawnClass actualPawn;
 
     @Override
     public void getPawnCoordinate(Coordinates coordinates) {
@@ -23,30 +24,32 @@ public class Knight implements PawnMovesInterface {
 
     @Override
     public void checkPossibleMoves() {
-        checkCoordinates(coordinates.getX() + 1, coordinates.getY() - 2);
-        checkCoordinates(coordinates.getX() - 1, coordinates.getY() - 2);
-        checkCoordinates(coordinates.getX() + 1, coordinates.getY() + 2);
-        checkCoordinates(coordinates.getX() - 1, coordinates.getY() + 2);
-        checkCoordinates(coordinates.getX() + 2, coordinates.getY() - 1);
-        checkCoordinates(coordinates.getX() - 2, coordinates.getY() - 1);
-        checkCoordinates(coordinates.getX() + 2, coordinates.getY() + 1);
-        checkCoordinates(coordinates.getX() - 2, coordinates.getY() + 1);
+        actualPawn = Board.getPawn(coordinates);
+
+        checkCoordinates(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 2));
+        checkCoordinates(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 2));
+        checkCoordinates(new Coordinates(coordinates.getX() + 1, coordinates.getY() + 2));
+        checkCoordinates(new Coordinates(coordinates.getX() - 1, coordinates.getY() + 2));
+        checkCoordinates(new Coordinates(coordinates.getX() + 2, coordinates.getY() - 1));
+        checkCoordinates(new Coordinates(coordinates.getX() - 2, coordinates.getY() - 1));
+        checkCoordinates(new Coordinates(coordinates.getX() + 2, coordinates.getY() + 1));
+        checkCoordinates(new Coordinates(coordinates.getX() - 2, coordinates.getY() + 1));
     }
 
-    private void checkCoordinates(int x, int y) {
-        if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
-            if(Board.isFieldNotNull(new Coordinates(x, y))) {
+    private void checkCoordinates(Coordinates coordinates) {
+        if(coordinates.isValid()) {
+            if(Board.isFieldNotNull(coordinates)) {
                 PawnClass pawn = Board.getPawn(coordinates);
 
-                if(!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                    if(Board.isKing(new Coordinates(x, y))) {
-                        possibleCheck.add(new Coordinates(x, y));
+                if(!Board.isThisSameColor(coordinates, actualPawn.getColor())) {
+                    if(pawn.getPawn().isKing()) {
+                        possibleCheck.add(coordinates);
                     } else {
-                        possibleKick.add(new Coordinates(x, y));
+                        possibleKick.add(coordinates);
                     }
                 }
             } else {
-                possibleMoves.add(new Coordinates(x, y));
+                possibleMoves.add(coordinates);
             }
         }
     }

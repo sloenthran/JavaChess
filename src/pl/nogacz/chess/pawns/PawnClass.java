@@ -34,7 +34,7 @@ public class PawnClass {
     }
 
     public ImageView getCheckedImage() {
-        Image image = new Image("file:resources/pawns/check_white_King.png");
+        Image image = new Image("file:resources/pawns/check_" + color + "_King.png");
         return new ImageView(image);
     }
 }

@@ -30,6 +30,14 @@ public class Coordinates {
         this.y = y;
     }
 
+    public boolean isValid() {
+        if(x <= 7 && x >=0 && y <= 7 && y >= 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

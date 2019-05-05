@@ -26,7 +26,7 @@ public class Computer {
         possibleKick.clear();
 
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
-            if(entry.getValue().getColor().equals(PawnColor.black)) {
+            if(entry.getValue().getColor().isBlack()) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
                 if(moves.getPossibleMoves().size() > 0) {
                     possibleMoves.add(entry.getKey());

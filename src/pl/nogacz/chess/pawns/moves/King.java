@@ -17,53 +17,53 @@ public class King implements PawnMovesInterface {
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleEnemyKick = new HashSet<>();
     private Set<Coordinates> possibleCheck = new HashSet<>();
-    private Coordinates coordinates;
-    private PawnClass pawn;
+    private Coordinates actualCoordinates;
+    private PawnClass actualPawn;
 
     @Override
     public void getPawnCoordinate(Coordinates coordinates) {
-        this.coordinates = coordinates;
+        this.actualCoordinates = coordinates;
     }
 
     @Override
     public void checkPossibleMoves() {
-        pawn = Board.getPawn(coordinates);
+        actualPawn = Board.getPawn(actualCoordinates);
 
-        checkCoordinates(coordinates.getX() + 1, coordinates.getY());
-        checkCoordinates(coordinates.getX() - 1, coordinates.getY());
-        checkCoordinates(coordinates.getX(), coordinates.getY() + 1);
-        checkCoordinates(coordinates.getX(), coordinates.getY() - 1);
-        checkCoordinates(coordinates.getX() + 1, coordinates.getY() + 1);
-        checkCoordinates(coordinates.getX() - 1, coordinates.getY() - 1);
-        checkCoordinates(coordinates.getX() + 1, coordinates.getY() - 1);
-        checkCoordinates(coordinates.getX() - 1, coordinates.getY() + 1);
+        checkCoordinates(new Coordinates(actualCoordinates.getX() + 1, actualCoordinates.getY()));
+        checkCoordinates(new Coordinates(actualCoordinates.getX() - 1, actualCoordinates.getY()));
+        checkCoordinates(new Coordinates(actualCoordinates.getX(), actualCoordinates.getY() + 1));
+        checkCoordinates(new Coordinates(actualCoordinates.getX(), actualCoordinates.getY() - 1));
+        checkCoordinates(new Coordinates(actualCoordinates.getX() + 1, actualCoordinates.getY() + 1));
+        checkCoordinates(new Coordinates(actualCoordinates.getX() - 1, actualCoordinates.getY() - 1));
+        checkCoordinates(new Coordinates(actualCoordinates.getX() + 1, actualCoordinates.getY() - 1));
+        checkCoordinates(new Coordinates(actualCoordinates.getX() - 1, actualCoordinates.getY() + 1));
     }
 
-    private void checkCoordinates(int x, int y) {
-        if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
-            if(!isEnemyKickField(new Coordinates(x, y))) {
-                if (Board.isFieldNotNull(new Coordinates(x, y))) {
+    private void checkCoordinates(Coordinates coordinates) {
+        if(coordinates.isValid()) {
+            if(!isEnemyKickField(coordinates)) {
+                if(Board.isFieldNotNull(coordinates)) {
                     PawnClass pawn = Board.getPawn(coordinates);
 
-                    if (!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                        if(Board.isKing(new Coordinates(x, y))) {
-                            possibleCheck.add(new Coordinates(x, y));
+                    if(!Board.isThisSameColor(coordinates, actualPawn.getColor())) {
+                        if(pawn.getPawn().isKing()) {
+                            possibleCheck.add(coordinates);
                         } else {
-                            possibleKick.add(new Coordinates(x, y));
+                            possibleKick.add(coordinates);
                         }
                     }
                 } else {
-                    possibleMoves.add(new Coordinates(x, y));
+                    possibleMoves.add(coordinates);
                 }
             }
         }
     }
 
     private boolean isEnemyKickField(Coordinates coordinates) {
-        PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, pawn);
+        PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
 
         for(Map.Entry<Coordinates, PawnClass> entry : Board.getBoard().entrySet()) {
-            if(!Board.isThisSameColor(entry.getKey(), pawn.getColor()) && !entry.getValue().getPawn().equals(Pawn.King)) {
+            if(!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && !entry.getValue().getPawn().isKing()) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
                 possibleEnemyKick.addAll(moves.getPossibleKick());
                 possibleEnemyKick.addAll(moves.getPossibleCheck());

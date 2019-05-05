@@ -9,5 +9,9 @@ public enum Pawn {
     Knight,
     Bishop,
     Queen,
-    King
+    King;
+
+    public boolean isKing() {
+        return this == King;
+    }
 }

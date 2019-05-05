@@ -5,5 +5,13 @@ package pl.nogacz.chess.pawns;
  */
 public enum PawnColor {
     black,
-    white
+    white;
+
+    public boolean isBlack() {
+        return this == black;
+    }
+
+    public boolean isWhite() {
+        return this == white;
+    }
 }

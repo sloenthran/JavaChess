@@ -18,6 +18,7 @@ public class Bishop implements PawnMovesInterface {
     private boolean checked = false;
 
     private Coordinates coordinates;
+    private PawnClass actualPawn;
 
     @Override
     public void getPawnCoordinate(Coordinates coordinates) {
@@ -26,6 +27,8 @@ public class Bishop implements PawnMovesInterface {
 
     @Override
     public void checkPossibleMoves() {
+        actualPawn = Board.getPawn(coordinates);
+
         boolean checkUpLeft = true;
         boolean checkUpRight = true;
         boolean checkBottomLeft = true;
@@ -33,50 +36,64 @@ public class Bishop implements PawnMovesInterface {
 
         for(int i = 1; i < 8; i++) {
             if(checkUpLeft) {
-                checkUpLeft = checkCoordinates(coordinates.getX() - i, coordinates.getY() - i);
+                checkUpLeft = checkCoordinates(new Coordinates(coordinates.getX() - i, coordinates.getY() - i));
             }
+        }
 
+        checked = false;
+
+        for(int i = 1; i < 8; i++) {
             if(checkUpRight) {
-                checkUpRight = checkCoordinates(coordinates.getX() + i, coordinates.getY() - i);
+                checkUpRight = checkCoordinates(new Coordinates(coordinates.getX() + i, coordinates.getY() - i));
             }
+        }
 
+        checked = false;
+
+        for(int i = 1; i < 8; i++) {
             if(checkBottomLeft) {
-                checkBottomLeft = checkCoordinates(coordinates.getX() - i, coordinates.getY() + i);
+                checkBottomLeft = checkCoordinates(new Coordinates(coordinates.getX() - i, coordinates.getY() + i));
             }
+        }
 
+        checked = false;
+
+        for(int i = 1; i < 8; i++) {
             if(checkBottomRight) {
-                checkBottomRight = checkCoordinates(coordinates.getX() + i, coordinates.getY() + i);
+                checkBottomRight = checkCoordinates(new Coordinates(coordinates.getX() + i, coordinates.getY() + i));
             }
         }
     }
 
-    private boolean checkCoordinates(int x, int y) {
-        if(x <= 7 && x >= 0 && y <= 7 && y >= 0) {
-            if(Board.isFieldNotNull(new Coordinates(x, y)) && !checked) {
-                PawnClass pawn = Board.getPawn(coordinates);
+    private boolean checkCoordinates(Coordinates coordinates) {
+        if(!coordinates.isValid()) {
+            return false;
+        }
 
-                if(!Board.isThisSameColor(new Coordinates(x, y), pawn.getColor())) {
-                    if(Board.isKing(new Coordinates(x, y))) {
-                        possibleCheck.add(new Coordinates(x, y));
-                        checked = true;
-                        return true;
-                    } else {
-                        possibleKick.add(new Coordinates(x, y));
-                    }
+        if(Board.isFieldNotNull(coordinates) && !checked) {
+            PawnClass pawn = Board.getPawn(coordinates);
+
+            if(!Board.isThisSameColor(coordinates, actualPawn.getColor())) {
+                if(pawn.getPawn().isKing()) {
+                    possibleCheck.add(coordinates);
+                    checked = true;
+                    return true;
+                } else {
+                    possibleKick.add(coordinates);
+                }
+            }
+        } else {
+            if(checked) {
+                if(!Board.isFieldNotNull(coordinates)) {
+                    possibleCheck.add(coordinates);
+                } else {
+                    return false;
                 }
             } else {
-                if(checked) {
-                    if(!Board.isFieldNotNull(new Coordinates(x, y))) {
-                        possibleCheck.add(new Coordinates(x, y));
-                    } else {
-                        return false;
-                    }
-                } else {
-                    possibleMoves.add(new Coordinates(x, y));
-                }
-
-                return true;
+                possibleMoves.add(coordinates);
             }
+
+            return true;
         }
 
         return false;
