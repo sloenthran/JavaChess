@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.Computer;
 import pl.nogacz.chess.application.Design;
+import pl.nogacz.chess.application.GameLogic;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
@@ -22,6 +23,7 @@ import java.util.Set;
  */
 public class Board {
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
+    private GameLogic gameLogic = new GameLogic();
 
     private Computer computer = new Computer();
     private boolean isComputerRound = false;
@@ -90,10 +92,16 @@ public class Board {
     }
 
     public void readMouseEvent(MouseEvent event) {
+        if(isComputerRound) {
+            return;
+        }
+
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
+        gameLogic.prepareData();
 
-        if(eventCoordinates.isValid() && !isComputerRound) {
-
+        if(!gameLogic.isMovePossible()) {
+            System.out.println("WIN: " + gameLogic.getWinner());
+        } else if(eventCoordinates.isValid()) {
             if(isSelected) {
                 if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;

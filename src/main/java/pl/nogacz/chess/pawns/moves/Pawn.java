@@ -29,7 +29,7 @@ public class Pawn implements PawnMovesInterface{
         PawnClass pawn = Board.getPawn(coordinates);
         int y = 0;
 
-        if(pawn.getColor().equals(PawnColor.black)) {
+        if(pawn.getColor().isBlack()) {
             y = coordinates.getY() + 1;
         } else {
             y = coordinates.getY() - 1;
