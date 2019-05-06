@@ -23,11 +23,7 @@ public class Coordinates {
     }
 
     public boolean isValid() {
-        if(x <= 7 && x >=0 && y <= 7 && y >= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return x <= 7 && x >=0 && y <= 7 && y >= 0;
     }
 
     @Override
