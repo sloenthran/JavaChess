@@ -26,7 +26,7 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(0, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -49,7 +49,7 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(0, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -72,7 +72,7 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(1, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -81,11 +81,11 @@ public class PawnTest {
 
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(false);
         PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(null);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(false);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(false);
 
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1))).thenReturn(false);
         PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1))).thenReturn(null);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(false);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(false);
 
         pawn.checkPossibleMoves();
 
@@ -102,8 +102,8 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(1, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
-        PawnClass enemyPawnClass = new PawnClass(Pawn.Pawn, PawnColor.black);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
+        PawnClass enemyPawnClass = new PawnClass(Pawn.PAWN, PawnColor.BLACK);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -112,10 +112,10 @@ public class PawnTest {
 
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(true);
         PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(enemyPawnClass);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(false);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(false);
 
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1))).thenReturn(true);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(true);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(true);
 
         pawn.checkPossibleMoves();
 
@@ -132,7 +132,7 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(0, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -155,8 +155,8 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(0, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
-        PawnClass enemyPawnClass = new PawnClass(Pawn.King, PawnColor.black);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
+        PawnClass enemyPawnClass = new PawnClass(Pawn.KING, PawnColor.BLACK);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -164,7 +164,7 @@ public class PawnTest {
         PowerMockito.when(Board.getPawn(coordinates)).thenReturn(pawnClass);
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(true);
         PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(enemyPawnClass);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(false);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(false);
 
         pawn.checkPossibleMoves();
 
@@ -181,8 +181,8 @@ public class PawnTest {
         PowerMockito.mockStatic(Board.class);
 
         Coordinates coordinates = new Coordinates(0, 6);
-        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
-        PawnClass enemyPawnClass = new PawnClass(Pawn.King, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
+        PawnClass enemyPawnClass = new PawnClass(Pawn.KING, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);
 
@@ -190,7 +190,7 @@ public class PawnTest {
         PowerMockito.when(Board.getPawn(coordinates)).thenReturn(pawnClass);
         PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(true);
         PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(enemyPawnClass);
-        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(true);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.WHITE)).thenReturn(true);
 
         pawn.checkPossibleMoves();
 

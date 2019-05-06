@@ -11,8 +11,8 @@ public class PawnColorTest {
     @Test
     public void testValidColors() {
         //Given
-        PawnColor black = PawnColor.black;
-        PawnColor white = PawnColor.white;
+        PawnColor black = PawnColor.BLACK;
+        PawnColor white = PawnColor.WHITE;
 
         //When
         boolean blackIsWhite = black.isWhite();

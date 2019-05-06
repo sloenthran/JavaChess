@@ -15,7 +15,7 @@ import java.util.Random;
 public class PawnPromote {
     private Random random = new Random();
 
-    private Pawn[] pawns = {Pawn.Queen, Pawn.Knight, Pawn.Rook, Pawn.Bishop};
+    private Pawn[] pawns = {Pawn.QUEEN, Pawn.KNIGHT, Pawn.ROOK, Pawn.BISHOP};
     private List<Pawn> dialogData = Arrays.asList(pawns);
 
     public void userPromote(Coordinates coordinates) {
@@ -25,7 +25,7 @@ public class PawnPromote {
 
         Optional<Pawn> result = dialog.showAndWait();
 
-        Pawn choice = Pawn.Queen;
+        Pawn choice = Pawn.QUEEN;
 
         if(result.isPresent()) {
             choice = result.get();

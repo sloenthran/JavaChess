@@ -43,9 +43,9 @@ public class GameLogic {
         }
 
         if(possibleMovesWhite.size() == 0) {
-            winner = PawnColor.black;
+            winner = PawnColor.BLACK;
         } else if(possibleMovesBlack.size() == 0) {
-            winner = PawnColor.white;
+            winner = PawnColor.WHITE;
         }
 
         return possibleMovesWhite.size() > 0 && possibleMovesBlack.size() > 0;

@@ -32,7 +32,7 @@ public class Queen implements PawnMovesInterface{
     }
 
     private void addRookMoves() {
-        PawnMoves moves = new PawnMoves(new PawnClass(Pawn.Rook, pawn.getColor()), coordinates);
+        PawnMoves moves = new PawnMoves(new PawnClass(Pawn.ROOK, pawn.getColor()), coordinates);
 
         possibleMoves.addAll(moves.getPossibleMoves());
         possibleKick.addAll(moves.getPossibleKick());
@@ -40,7 +40,7 @@ public class Queen implements PawnMovesInterface{
     }
 
     private void addBishopMoves() {
-        PawnMoves moves = new PawnMoves(new PawnClass(Pawn.Bishop, pawn.getColor()), coordinates);
+        PawnMoves moves = new PawnMoves(new PawnClass(Pawn.BISHOP, pawn.getColor()), coordinates);
 
         possibleMoves.addAll(moves.getPossibleMoves());
         possibleKick.addAll(moves.getPossibleKick());

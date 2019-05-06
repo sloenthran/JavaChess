@@ -11,14 +11,14 @@ public class PawnClassTest {
     @Test
     public void testFunction() {
         //Given
-        PawnClass pawnClass = new PawnClass(Pawn.King, PawnColor.white);
+        PawnClass pawnClass = new PawnClass(Pawn.KING, PawnColor.WHITE);
 
         //When
         Pawn getPawn = pawnClass.getPawn();
         PawnColor getColor = pawnClass.getColor();
 
         //Then
-        assertEquals(Pawn.King, getPawn);
-        assertEquals(PawnColor.white, getColor);
+        assertEquals(Pawn.KING, getPawn);
+        assertEquals(PawnColor.WHITE, getColor);
     }
 }

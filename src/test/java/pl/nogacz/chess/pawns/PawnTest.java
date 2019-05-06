@@ -11,8 +11,8 @@ public class PawnTest {
     @Test
     public void isKing() {
         //Given
-        Pawn queen = Pawn.Queen;
-        Pawn king = Pawn.King;
+        Pawn queen = Pawn.QUEEN;
+        Pawn king = Pawn.KING;
 
         //When
         boolean queenIsKing = queen.isKing();

@@ -63,28 +63,28 @@ public class Board {
     }
 
     private void addStartPawn() {
-        board.put(new Coordinates(0,0), new PawnClass(Pawn.Rook, PawnColor.black));
-        board.put(new Coordinates(1,0), new PawnClass(Pawn.Knight, PawnColor.black));
-        board.put(new Coordinates(2,0), new PawnClass(Pawn.Bishop, PawnColor.black));
-        board.put(new Coordinates(3,0), new PawnClass(Pawn.King, PawnColor.black));
-        board.put(new Coordinates(4,0), new PawnClass(Pawn.Queen, PawnColor.black));
-        board.put(new Coordinates(5,0), new PawnClass(Pawn.Bishop, PawnColor.black));
-        board.put(new Coordinates(6,0), new PawnClass(Pawn.Knight, PawnColor.black));
-        board.put(new Coordinates(7,0), new PawnClass(Pawn.Rook, PawnColor.black));
+        board.put(new Coordinates(0,0), new PawnClass(Pawn.ROOK, PawnColor.BLACK));
+        board.put(new Coordinates(1,0), new PawnClass(Pawn.KNIGHT, PawnColor.BLACK));
+        board.put(new Coordinates(2,0), new PawnClass(Pawn.BISHOP, PawnColor.BLACK));
+        board.put(new Coordinates(3,0), new PawnClass(Pawn.KING, PawnColor.BLACK));
+        board.put(new Coordinates(4,0), new PawnClass(Pawn.QUEEN, PawnColor.BLACK));
+        board.put(new Coordinates(5,0), new PawnClass(Pawn.BISHOP, PawnColor.BLACK));
+        board.put(new Coordinates(6,0), new PawnClass(Pawn.KNIGHT, PawnColor.BLACK));
+        board.put(new Coordinates(7,0), new PawnClass(Pawn.ROOK, PawnColor.BLACK));
 
         for(int i = 0; i < 8; i++) {
-            board.put(new Coordinates(i, 1), new PawnClass(Pawn.Pawn, PawnColor.black));
-            board.put(new Coordinates(i, 6), new PawnClass(Pawn.Pawn, PawnColor.white));
+            board.put(new Coordinates(i, 1), new PawnClass(Pawn.PAWN, PawnColor.BLACK));
+            board.put(new Coordinates(i, 6), new PawnClass(Pawn.PAWN, PawnColor.WHITE));
         }
 
-        board.put(new Coordinates(0,7), new PawnClass(Pawn.Rook, PawnColor.white));
-        board.put(new Coordinates(1,7), new PawnClass(Pawn.Knight, PawnColor.white));
-        board.put(new Coordinates(2,7), new PawnClass(Pawn.Bishop, PawnColor.white));
-        board.put(new Coordinates(3,7), new PawnClass(Pawn.Queen, PawnColor.white));
-        board.put(new Coordinates(4,7), new PawnClass(Pawn.King, PawnColor.white));
-        board.put(new Coordinates(5,7), new PawnClass(Pawn.Bishop, PawnColor.white));
-        board.put(new Coordinates(6,7), new PawnClass(Pawn.Knight, PawnColor.white));
-        board.put(new Coordinates(7,7), new PawnClass(Pawn.Rook, PawnColor.white));
+        board.put(new Coordinates(0,7), new PawnClass(Pawn.ROOK, PawnColor.WHITE));
+        board.put(new Coordinates(1,7), new PawnClass(Pawn.KNIGHT, PawnColor.WHITE));
+        board.put(new Coordinates(2,7), new PawnClass(Pawn.BISHOP, PawnColor.WHITE));
+        board.put(new Coordinates(3,7), new PawnClass(Pawn.QUEEN, PawnColor.WHITE));
+        board.put(new Coordinates(4,7), new PawnClass(Pawn.KING, PawnColor.WHITE));
+        board.put(new Coordinates(5,7), new PawnClass(Pawn.BISHOP, PawnColor.WHITE));
+        board.put(new Coordinates(6,7), new PawnClass(Pawn.KNIGHT, PawnColor.WHITE));
+        board.put(new Coordinates(7,7), new PawnClass(Pawn.ROOK, PawnColor.WHITE));
 
         for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
             Design.addPawn(entry.getKey(), entry.getValue());

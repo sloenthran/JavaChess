@@ -36,7 +36,7 @@ public class PawnMoves {
     }
 
     private PawnMovesInterface getMoveClass() {
-        String className = "pl.nogacz.chess.pawns.moves." + pawn.getPawn();
+        String className = "pl.nogacz.chess.pawns.moves." + prepareClassName();
         PawnMovesInterface moveInterface = null;
 
         try {
@@ -48,5 +48,10 @@ public class PawnMoves {
         }
 
         return moveInterface;
+    }
+
+    private String prepareClassName() {
+        String returnString = pawn.getPawn().toString().toLowerCase();
+        return returnString.substring(0, 1).toUpperCase() + returnString.substring(1);
     }
 }
