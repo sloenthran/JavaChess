@@ -8,8 +8,5 @@ import static org.junit.Assert.*;
  * @author Dawid Nogacz on 05.05.2019
  */
 public class GameLogicTest {
-    @Test
-    public void isMovePossible() {
-        //TODO
-    }
+    //TODO
 }
