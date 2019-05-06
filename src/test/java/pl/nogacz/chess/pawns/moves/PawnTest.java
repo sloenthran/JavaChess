@@ -125,8 +125,78 @@ public class PawnTest {
         Assert.assertEquals(1, possibleKick.size());
     }
 
-    //@Test
-    public void getPossibleCheck() {
-        //TODO
+    @PrepareForTest({Board.class})
+    @Test
+    public void getPossibleCheckIfFieldIsEmpty() {
+        //Given
+        PowerMockito.mockStatic(Board.class);
+
+        Coordinates coordinates = new Coordinates(0, 6);
+        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
+        pawn.getPawnCoordinate(coordinates);
+
+        //When
+        PowerMockito.when(Board.getPawn(coordinates)).thenReturn(pawnClass);
+        PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(false);
+
+        pawn.checkPossibleMoves();
+
+        Set<Coordinates> possibleCheck = pawn.getPossibleCheck();
+
+        //Then
+        Assert.assertEquals(0, possibleCheck.size());
+    }
+
+    @PrepareForTest({Board.class})
+    @Test
+    public void getPossibleCheckIfFieldIsFull() {
+        //Given
+        PowerMockito.mockStatic(Board.class);
+
+        Coordinates coordinates = new Coordinates(0, 6);
+        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass enemyPawnClass = new PawnClass(Pawn.King, PawnColor.black);
+        pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
+        pawn.getPawnCoordinate(coordinates);
+
+        //When
+        PowerMockito.when(Board.getPawn(coordinates)).thenReturn(pawnClass);
+        PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(true);
+        PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(enemyPawnClass);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(false);
+
+        pawn.checkPossibleMoves();
+
+        Set<Coordinates> possibleCheck = pawn.getPossibleCheck();
+
+        //Then
+        Assert.assertEquals(1, possibleCheck.size());
+    }
+
+    @PrepareForTest({Board.class})
+    @Test
+    public void getPossibleCheckIfFieldIsFullAndKingIsThisSameColor() {
+        //Given
+        PowerMockito.mockStatic(Board.class);
+
+        Coordinates coordinates = new Coordinates(0, 6);
+        PawnClass pawnClass = new PawnClass(Pawn.Pawn, PawnColor.white);
+        PawnClass enemyPawnClass = new PawnClass(Pawn.King, PawnColor.white);
+        pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
+        pawn.getPawnCoordinate(coordinates);
+
+        //When
+        PowerMockito.when(Board.getPawn(coordinates)).thenReturn(pawnClass);
+        PowerMockito.when(Board.isFieldNotNull(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(true);
+        PowerMockito.when(Board.getPawn(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1))).thenReturn(enemyPawnClass);
+        PowerMockito.when(Board.isThisSameColor(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1), PawnColor.white)).thenReturn(true);
+
+        pawn.checkPossibleMoves();
+
+        Set<Coordinates> possibleCheck = pawn.getPossibleCheck();
+
+        //Then
+        Assert.assertEquals(0, possibleCheck.size());
     }
 }

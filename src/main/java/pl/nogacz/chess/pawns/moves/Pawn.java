@@ -70,7 +70,9 @@ public class Pawn implements PawnMovesInterface{
             if (!Board.isThisSameColor(coordinates, pawn.getColor())) {
                 isPossibleKickPromote(coordinates, pawn);
 
-                if(pawn.getPawn().isKing()) {
+                PawnClass enemyPawn = Board.getPawn(coordinates);
+
+                if(enemyPawn.getPawn().isKing()) {
                     possibleCheck.add(coordinates);
                 } else {
                     possibleKick.add(coordinates);
