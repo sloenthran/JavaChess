@@ -14,6 +14,7 @@ import java.util.Set;
 /**
  * @author Dawid Nogacz on 05.05.2019
  */
+//TODO REPAIR CLASS...
 public class GameLogic {
     private HashMap<Coordinates, PawnClass> cacheBoard;
 

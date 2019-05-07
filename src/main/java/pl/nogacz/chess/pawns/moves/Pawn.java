@@ -37,8 +37,16 @@ public class Pawn implements PawnMovesInterface{
 
         if(y <= 7 && y >= 0) {
             if (!Board.isFieldNotNull(new Coordinates(coordinates.getX(), y))) {
-                isPossibleMovePromote(new Coordinates(coordinates.getX(), y), pawn);
-                possibleMoves.add(new Coordinates(coordinates.getX(), y));
+                if(pawn.getColor().isBlack() && coordinates.getY() == 1) {
+                    checkMove(new Coordinates(coordinates.getX(), y));
+                    checkMove(new Coordinates(coordinates.getX(), y + 1));
+                } else if(pawn.getColor().isWhite() && coordinates.getY() == 6) {
+                    checkMove(new Coordinates(coordinates.getX(), y));
+                    checkMove(new Coordinates(coordinates.getX(), y - 1));
+                } else {
+                    isPossibleMovePromote(new Coordinates(coordinates.getX(), y), pawn);
+                    possibleMoves.add(new Coordinates(coordinates.getX(), y));
+                }
             }
 
             checkField(new Coordinates(coordinates.getX() - 1, y), pawn);
@@ -78,6 +86,12 @@ public class Pawn implements PawnMovesInterface{
                     possibleKick.add(coordinates);
                 }
             }
+        }
+    }
+
+    public void checkMove(Coordinates coordinates) {
+        if(!Board.isFieldNotNull(coordinates)) {
+            possibleMoves.add(coordinates);
         }
     }
 
