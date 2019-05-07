@@ -15,7 +15,7 @@ public class Bishop implements PawnMovesInterface {
     private Set<Coordinates> possibleKick = new HashSet<>();
 
     private Set<Coordinates> possibleCheck = new HashSet<>();
-    private boolean checked = false;
+    private boolean kingChecked = false;
 
     private Coordinates coordinates;
     private PawnClass actualPawn;
@@ -40,7 +40,7 @@ public class Bishop implements PawnMovesInterface {
             }
         }
 
-        checked = false;
+        kingChecked = false;
 
         for(int i = 1; i < 8; i++) {
             if(checkUpRight) {
@@ -48,7 +48,7 @@ public class Bishop implements PawnMovesInterface {
             }
         }
 
-        checked = false;
+        kingChecked = false;
 
         for(int i = 1; i < 8; i++) {
             if(checkBottomLeft) {
@@ -56,7 +56,7 @@ public class Bishop implements PawnMovesInterface {
             }
         }
 
-        checked = false;
+        kingChecked = false;
 
         for(int i = 1; i < 8; i++) {
             if(checkBottomRight) {
@@ -70,25 +70,22 @@ public class Bishop implements PawnMovesInterface {
             return false;
         }
 
-        if(Board.isFieldNotNull(coordinates) && !checked) {
-            PawnClass pawn = Board.getPawn(coordinates);
+        if(Board.isFieldNotNull(coordinates)) {
+            PawnClass enemyPawn = Board.getPawn(coordinates);
 
-            if(!Board.isThisSameColor(coordinates, actualPawn.getColor())) {
-                if(pawn.getPawn().isKing()) {
+            if(!Board.isThisSameColor(coordinates, actualPawn.getColor()) && !kingChecked) {
+                if(enemyPawn.getPawn().isKing()) {
+                    kingChecked = true;
                     possibleCheck.add(coordinates);
-                    checked = true;
+
                     return true;
                 } else {
                     possibleKick.add(coordinates);
                 }
             }
         } else {
-            if(checked) {
-                if(!Board.isFieldNotNull(coordinates)) {
-                    possibleCheck.add(coordinates);
-                } else {
-                    return false;
-                }
+            if(kingChecked) {
+                possibleCheck.add(coordinates);
             } else {
                 possibleMoves.add(coordinates);
             }

@@ -29,6 +29,7 @@ public class King implements PawnMovesInterface {
     public void checkPossibleMoves() {
         actualPawn = Board.getPawn(actualCoordinates);
 
+        checkCoordinates(actualCoordinates);
         checkCoordinates(new Coordinates(actualCoordinates.getX() + 1, actualCoordinates.getY()));
         checkCoordinates(new Coordinates(actualCoordinates.getX() - 1, actualCoordinates.getY()));
         checkCoordinates(new Coordinates(actualCoordinates.getX(), actualCoordinates.getY() + 1));

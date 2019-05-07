@@ -44,8 +44,9 @@ public class Computer {
 
         if(possibleKick.size() > 0) {
             object = possibleKick.toArray();
-        } else {
+        } else if(possibleMoves.size() > 0) {
             object = possibleMoves.toArray();
+
         }
 
         return (Coordinates) object[random.nextInt(object.length)];
@@ -58,9 +59,16 @@ public class Computer {
         if(moves.getPossibleKick().size() > 0) {
             Object[] object = moves.getPossibleKick().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
-        } else {
+        } else if(moves.getPossibleMoves().size() > 0){
             Object[] object = moves.getPossibleMoves().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
         }
+
+        return null;
+    }
+
+    public Coordinates selectRandom(Set<Coordinates> list) {
+        Object[] object = list.toArray();
+        return (Coordinates) object[random.nextInt(object.length)];
     }
 }

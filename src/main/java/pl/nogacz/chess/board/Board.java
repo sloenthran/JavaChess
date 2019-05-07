@@ -38,6 +38,9 @@ public class Board {
     private Set<Coordinates> possibleKick;
     private Set<Coordinates> possibleCheck;
 
+    private boolean isKingChecked = false;
+    private Set<Coordinates> possiblePawnIfKingIsChecked = new HashSet<>();
+
     public Board() {
         addStartPawn();
     }
@@ -46,16 +49,8 @@ public class Board {
         return board;
     }
 
-    public static Set<Coordinates> getPossibleMovePromote() {
-        return possibleMovePromote;
-    }
-
     public static void addPossibleMovePromote(Set<Coordinates> coordinates) {
         possibleMovePromote.addAll(coordinates);
-    }
-
-    public static Set<Coordinates> getPossibleKickPromote() {
-        return possibleKickPromote;
     }
 
     public static void addPossibleKickPromote(Set<Coordinates> coordinates) {
@@ -99,20 +94,26 @@ public class Board {
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
         gameLogic.prepareData();
 
-        if(!gameLogic.isMovePossible()) {
-            System.out.println("WIN: " + gameLogic.getWinner());
+        if(!gameLogic.isMovePossible() || isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
+            endGame();
         } else if(eventCoordinates.isValid()) {
             if(isSelected) {
                 if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;
                     isSelected = false;
+
                     unLightSelect(eventCoordinates);
+
+                    if(isKingChecked) {
+                        possiblePawnIfKingIsChecked.forEach(this::lightPawn);
+                    }
                 } else if(isPossibleMove(eventCoordinates)) {
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, eventCoordinates);
 
                     selectedCoordinates = null;
                     isSelected = false;
+                    isKingChecked = false;
 
                     checkPromote(eventCoordinates, 0);
 
@@ -120,10 +121,14 @@ public class Board {
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
-                    if(getPawn(eventCoordinates).getColor().isWhite()) {
-                        possibleMovePromote.clear();
-                        possibleKickPromote.clear();
+                    /*if(Board.getPawn(eventCoordinates).getColor().isBlack()) {
+                        return;
+                    }*/
 
+                    possibleMovePromote.clear();
+                    possibleKickPromote.clear();
+
+                    if(isPossibleSelect(eventCoordinates, PawnColor.WHITE)) {
                         selectedCoordinates = eventCoordinates;
                         isSelected = true;
                         lightSelect(eventCoordinates);
@@ -150,24 +155,61 @@ public class Board {
         computerSleep.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
             @Override
             public void handle(WorkerStateEvent event) {
-                Coordinates moveCoordinates = computer.chooseMove(selectedCoordinates);
-                unLightSelect(selectedCoordinates);
-                movePawn(selectedCoordinates, moveCoordinates);
+                if(isKingChecked) {
+                    if(possibleKick.size() > 0) {
+                        Coordinates moveCoordinates = computer.selectRandom(possibleKick);
+                        unLightSelect(selectedCoordinates);
+                        movePawn(selectedCoordinates, moveCoordinates);
 
-                checkPromote(moveCoordinates, 1);
+                        checkPromote(moveCoordinates, 1);
 
-                isComputerRound = false;
-                selectedCoordinates = null;
+                        isKingChecked = false;
+                        isComputerRound = false;
+                        selectedCoordinates = null;
+                    } else {
+                        endGame();
+                    }
+                } else {
+                    Coordinates moveCoordinates = computer.chooseMove(selectedCoordinates);
+                    unLightSelect(selectedCoordinates);
+                    movePawn(selectedCoordinates, moveCoordinates);
+
+                    checkPromote(moveCoordinates, 1);
+
+                    isComputerRound = false;
+                    selectedCoordinates = null;
+                }
             }
         });
 
         isComputerRound = true;
         computer.getGameData();
-        selectedCoordinates = computer.choosePawn();
+        gameLogic.prepareData();
 
-        lightSelect(selectedCoordinates);
+        if(gameLogic.isKingChecked(PawnColor.BLACK)) {
+            possiblePawnIfKingIsChecked = gameLogic.getPossiblePawnIfKingIsChecked(PawnColor.BLACK);
 
-        new Thread(computerSleep).start();
+            if(possiblePawnIfKingIsChecked.size() == 0) {
+                endGame();
+            } else {
+                selectedCoordinates = computer.selectRandom(possiblePawnIfKingIsChecked);
+                lightSelect(selectedCoordinates);
+
+                new Thread(computerSleep).start();
+            }
+        } else if(gameLogic.isMovePossible()) {
+            selectedCoordinates = computer.choosePawn();
+
+            lightSelect(selectedCoordinates);
+
+            new Thread(computerSleep).start();
+        } else {
+            endGame();
+        }
+    }
+
+    private void endGame() {
+        System.out.println("END GAME :(");
     }
 
     private void checkPromote(Coordinates coordinates, int type) {
@@ -186,6 +228,20 @@ public class Board {
                 pawnPromote.computerPromote(coordinates);
             }
         }
+    }
+
+    private boolean isPossibleSelect(Coordinates coordinates, PawnColor color) {
+        isKingChecked = gameLogic.isKingChecked(color);
+
+        if(isKingChecked) {
+            possiblePawnIfKingIsChecked = gameLogic.getPossiblePawnIfKingIsChecked(color);
+
+            possiblePawnIfKingIsChecked.forEach(this::lightPawn);
+
+            return possiblePawnIfKingIsChecked.contains(coordinates);
+        }
+
+        return true;
     }
 
     private boolean isPossibleMove(Coordinates coordinates) {
@@ -247,13 +303,19 @@ public class Board {
     private void lightSelect(Coordinates coordinates) {
         PawnMoves pawnMoves = new PawnMoves(getPawn(coordinates), coordinates);
 
-        possibleMoves = pawnMoves.getPossibleMoves();
-        possibleKick = pawnMoves.getPossibleKick();
-        possibleCheck = pawnMoves.getPossibleCheck();
+        if(isKingChecked) {
+            possibleKick = gameLogic.getPossibleKickIfKingIsChecked(coordinates);
+            possibleMoves = gameLogic.getPossibleMovesIfKingIsChecked(coordinates);
+            possiblePawnIfKingIsChecked.forEach(this::unLightPawn);
+        } else {
+            possibleMoves = pawnMoves.getPossibleMoves();
+            possibleKick = pawnMoves.getPossibleKick();
+            possibleCheck = pawnMoves.getPossibleCheck();
+            possibleCheck.forEach(this::checkedPawn);
+        }
 
         possibleMoves.forEach(this::lightMove);
         possibleKick.forEach(this::lightPawn);
-        possibleCheck.forEach(this::checkedPawn);
 
         lightPawn(coordinates);
     }
