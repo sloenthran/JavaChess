@@ -35,7 +35,3 @@ task fatJar(type: Jar) {
     }
     with jar
 }
-
-artifacts {
-    archives fatJar
-}

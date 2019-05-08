@@ -14,10 +14,14 @@ import java.util.Set;
 /**
  * @author Dawid Nogacz on 05.05.2019
  */
-
-//TODO Add game draw...
+//TODO Add game draw
 public class GameLogic {
     private HashMap<Coordinates, PawnClass> cacheBoard;
+    private PawnColor winner;
+
+    public PawnColor getWinner() {
+        return winner;
+    }
 
     public void prepareData() {
         cacheBoard = new HashMap<>(Board.getBoard());
@@ -37,6 +41,14 @@ public class GameLogic {
                 possibleMovesWhite.addAll(moves.getPossibleKick());
                 possibleMovesWhite.addAll(moves.getPossibleMoves());
             }
+        }
+
+        if(possibleMovesWhite.size() == 0 && possibleMovesBlack.size() == 0) {
+            winner = null;
+        } else if(possibleMovesWhite.size() == 0) {
+            winner = PawnColor.BLACK;
+        } else if(possibleMovesBlack.size() == 0) {
+            winner = PawnColor.WHITE;
         }
 
         return possibleMovesWhite.size() > 0 && possibleMovesBlack.size() > 0;

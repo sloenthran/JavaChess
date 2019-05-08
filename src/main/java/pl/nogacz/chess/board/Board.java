@@ -25,6 +25,7 @@ import java.util.Set;
 public class Board {
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private GameLogic gameLogic = new GameLogic();
+    private boolean isGameEnd = false;
 
     private Computer computer = new Computer();
     private boolean isComputerRound = false;
@@ -88,7 +89,7 @@ public class Board {
     }
 
     public void readMouseEvent(MouseEvent event) {
-        if(isComputerRound) {
+        if(isComputerRound || isGameEnd) {
             return;
         }
 
@@ -96,7 +97,7 @@ public class Board {
         gameLogic.prepareData();
 
         if(!gameLogic.isMovePossible()) {
-            //TODO Add end
+            noMovePossibleInfo();
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
             endGame("You loss. Maybe you try again?");
         } else if(eventCoordinates.isValid()) {
@@ -207,12 +208,21 @@ public class Board {
 
             new Thread(computerSleep).start();
         } else {
-            //TODO Add end
+            noMovePossibleInfo();
         }
     }
 
     private void endGame(String message) {
+        isGameEnd = true;
         new EndGame(message);
+    }
+
+    private void noMovePossibleInfo() {
+        switch(gameLogic.getWinner()) {
+            case WHITE: { endGame("You win! Congratulations! :)"); break; }
+            case BLACK: { endGame("You loss. Maybe you try again?"); break; }
+            default: { endGame("Draw. Maybe you try again?"); break; }
+        }
     }
 
     private void checkPromote(Coordinates coordinates, int type) {
