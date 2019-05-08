@@ -14,7 +14,8 @@ import java.util.Set;
 /**
  * @author Dawid Nogacz on 05.05.2019
  */
-//TODO REPAIR CLASS...
+
+//TODO Add game draw...
 public class GameLogic {
     private HashMap<Coordinates, PawnClass> cacheBoard;
 
@@ -67,11 +68,11 @@ public class GameLogic {
                     if(moves.getPossibleMoves().size() > 0) {
                         possiblePawn.add(entry.getKey());
                     }
-                } else {
-                    for (Coordinates coordinates : moves.getPossibleKick()) {
-                        if (possibleCheck.contains(coordinates)) {
-                            possiblePawn.add(entry.getKey());
-                        }
+                }
+
+                for(Coordinates coordinates : moves.getPossibleKick()) {
+                    if(possibleCheck.contains(coordinates)) {
+                        possiblePawn.add(entry.getKey());
                     }
                 }
             }
@@ -84,7 +85,7 @@ public class GameLogic {
         Set<Coordinates> possibleCheck = new HashSet<>();
 
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
-            if(entry.getValue().getColor() != color) {
+            if(entry.getValue().getColor() != color && !entry.getValue().getPawn().isKing()) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
 
                 if(moves.getPossibleCheck().size() > 0) {

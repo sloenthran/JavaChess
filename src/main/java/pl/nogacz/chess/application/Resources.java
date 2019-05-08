@@ -8,6 +8,7 @@ import java.net.URL;
 public class Resources {
     public static String getPath(String fileName) {
         Resources resources = new Resources();
+
         return resources.getFileFromResources(fileName);
     }
 

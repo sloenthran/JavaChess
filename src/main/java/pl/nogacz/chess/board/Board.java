@@ -120,13 +120,13 @@ public class Board {
 
                     checkPromote(eventCoordinates, 0);
 
-                    //computerMove();
+                    computerMove();
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
-                    /*if(Board.getPawn(eventCoordinates).getColor().isBlack()) {
+                    if(Board.getPawn(eventCoordinates).getColor().isBlack()) {
                         return;
-                    }*/
+                    }
 
                     possibleMovePromote.clear();
                     possibleKickPromote.clear();
