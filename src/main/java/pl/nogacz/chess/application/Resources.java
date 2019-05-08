@@ -7,13 +7,7 @@ import java.net.URL;
  */
 public class Resources {
     public static String getPath(String fileName) {
-        Resources resources = new Resources();
-
-        return resources.getFileFromResources(fileName);
-    }
-
-    private String getFileFromResources(String fileName) {
-        ClassLoader classLoader = getClass().getClassLoader();
+        ClassLoader classLoader = Resources.class.getClassLoader();
 
         URL resource = classLoader.getResource(fileName);
 

@@ -25,7 +25,7 @@ public class PawnTest {
         //Given
         PowerMockito.mockStatic(Board.class);
 
-        Coordinates coordinates = new Coordinates(0, 6);
+        Coordinates coordinates = new Coordinates(0, 5);
         PawnClass pawnClass = new PawnClass(Pawn.PAWN, PawnColor.WHITE);
         pl.nogacz.chess.pawns.moves.Pawn pawn = new pl.nogacz.chess.pawns.moves.Pawn();
         pawn.getPawnCoordinate(coordinates);

@@ -96,7 +96,7 @@ public class Board {
         gameLogic.prepareData();
 
         if(!gameLogic.isMovePossible()) {
-            endGame("Draw. None of the players has any more moves ... :(");
+            //TODO Add end
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
             endGame("You loss. Maybe you try again?");
         } else if(eventCoordinates.isValid()) {
@@ -207,7 +207,7 @@ public class Board {
 
             new Thread(computerSleep).start();
         } else {
-            endGame("Draw. None of the players has any more moves ... :(");
+            //TODO Add end
         }
     }
 
@@ -240,8 +240,6 @@ public class Board {
             possiblePawnIfKingIsChecked = gameLogic.getPossiblePawnIfKingIsChecked(color);
 
             possiblePawnIfKingIsChecked.forEach(this::lightPawn);
-
-            System.out.println(possiblePawnIfKingIsChecked.contains(coordinates));
 
             return possiblePawnIfKingIsChecked.contains(coordinates);
         }
