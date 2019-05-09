@@ -166,23 +166,27 @@ public class Board {
                         movePawn(selectedCoordinates, moveCoordinates);
 
                         checkPromote(moveCoordinates, 1);
+                    } else if(possibleMoves.size() > 0) {
+                        Coordinates moveCoordinates = computer.selectRandom(possibleMoves);
+                        unLightSelect(selectedCoordinates);
+                        movePawn(selectedCoordinates, moveCoordinates);
 
-                        isKingChecked = false;
-                        isComputerRound = false;
-                        selectedCoordinates = null;
+                        checkPromote(moveCoordinates, 1);
                     } else {
                         endGame("You win! Congratulations :)");
                     }
+
+                    isKingChecked = false;
                 } else {
                     Coordinates moveCoordinates = computer.chooseMove(selectedCoordinates);
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, moveCoordinates);
 
                     checkPromote(moveCoordinates, 1);
-
-                    isComputerRound = false;
-                    selectedCoordinates = null;
                 }
+
+                isComputerRound = false;
+                selectedCoordinates = null;
             }
         });
 

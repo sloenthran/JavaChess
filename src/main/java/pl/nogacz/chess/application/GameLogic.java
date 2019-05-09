@@ -134,15 +134,6 @@ public class GameLogic {
 
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        Set<Coordinates> possibleMove = new HashSet<>();
-        Set<Coordinates> possibleCheck = getPossibleCheck(pawn.getColor());
-
-        for(Coordinates moveCoordinates : moves.getPossibleMoves()) {
-            if(possibleCheck.contains(moveCoordinates)) {
-                possibleMove.add(moveCoordinates);
-            }
-        }
-
-        return possibleMove;
+        return moves.getPossibleMoves();
     }
 }
