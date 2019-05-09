@@ -1,6 +1,9 @@
 package pl.nogacz.chess.application;
 
-import javax.swing.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+
+import java.util.Optional;
 
 /**
  * @author Dawid Nogacz on 07.05.2019
@@ -12,31 +15,26 @@ public class EndGame {
     }
 
     private void printDialog(String message) {
-        JFrame frame = new JFrame();
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Sloenthran :: Chess");
+        alert.setHeaderText(message);
+        alert.setContentText("Choose your option.");
 
-        Object stringArray[] = { "New game", "Exit game" };
+        ButtonType newGameButton = new ButtonType("New game");
+        ButtonType exitButton = new ButtonType("Exit");
 
-        int result = JOptionPane.showOptionDialog(frame,
-                message,
-                "Select option",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                stringArray,
-                stringArray[0]);
+        alert.getButtonTypes().setAll(newGameButton, exitButton);
 
-        chooseAction(result);
-    }
-
-    private void chooseAction(int action) {
-        switch (action) {
-            case 1: { newGame(); break; }
-            default: { System.exit(0); break; }
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == newGameButton){
+            newGame();
+        } else {
+            System.exit(0);
         }
     }
 
     private void newGame() {
         //TODO newGame
-
+        System.out.println("New game");
     }
 }
