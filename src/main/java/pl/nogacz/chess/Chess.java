@@ -23,6 +23,7 @@ public class Chess extends Application {
     public void start(Stage primaryStage) {
         Scene scene = new Scene(design.getGrid(), 750, 750, Color.BLACK);
         scene.setOnMouseClicked(event -> board.readMouseEvent(event));
+        scene.setOnKeyReleased(event -> board.readKeyboard(event));
 
         primaryStage.setTitle("Sloenthran :: Chess");
         primaryStage.setScene(scene);

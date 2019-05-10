@@ -3,6 +3,8 @@ package pl.nogacz.chess.board;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.*;
 import pl.nogacz.chess.pawns.Pawn;
@@ -112,6 +114,7 @@ public class Board {
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
             endGame("You loss. Maybe you try again?");
         } else if(eventCoordinates.isValid()) {
+
             if(isSelected) {
                 if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;
@@ -150,6 +153,12 @@ public class Board {
                     }
                 }
             }
+        }
+    }
+
+    public void readKeyboard(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.R) || event.getCode().equals(KeyCode.N)) {
+            new EndGame("").newGame();
         }
     }
 
@@ -198,6 +207,7 @@ public class Board {
 
                 isComputerRound = false;
                 selectedCoordinates = null;
+                saveGame.save();
             }
         });
 
@@ -225,13 +235,11 @@ public class Board {
         } else {
             noMovePossibleInfo();
         }
-
-        saveGame.save();
     }
 
     private void endGame(String message) {
         isGameEnd = true;
-        new EndGame(message);
+        new EndGame(message).printDialog();
     }
 
     private void noMovePossibleInfo() {

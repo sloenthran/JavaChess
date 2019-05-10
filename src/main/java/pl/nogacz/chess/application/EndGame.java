@@ -13,12 +13,13 @@ import java.util.Optional;
  */
 public class EndGame {
     private SaveGame saveGame = new SaveGame();
+    private String message;
 
     public EndGame(String message) {
-        printDialog(message);
+        this.message = message;
     }
 
-    private void printDialog(String message) {
+    public void printDialog() {
         Alert alert = new Alert(Alert.AlertType.NONE);
         alert.setTitle("Sloenthran :: Chess");
         alert.setContentText(message);
@@ -37,12 +38,12 @@ public class EndGame {
         }
     }
 
-    private void newGame() {
+    public void newGame() {
         saveGame.remove();
         restartApplication();
     }
 
-    public void restartApplication()
+    private void restartApplication()
     {
         try {
             final String javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";

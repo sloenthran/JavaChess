@@ -5,7 +5,6 @@ import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -35,7 +34,7 @@ public class SaveGame {
         try {
             File file = new File("gameData.dat");
             ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
-            //Reads the first object in
+
             Object readObject = input.readObject();
             input.close();
 
