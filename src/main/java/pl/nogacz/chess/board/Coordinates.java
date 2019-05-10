@@ -1,11 +1,12 @@
 package pl.nogacz.chess.board;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author Dawid Nogacz on 01.05.2019
  */
-public class Coordinates {
+public class Coordinates implements Serializable {
     private int x;
     private int y;
 

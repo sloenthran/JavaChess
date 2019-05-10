@@ -4,10 +4,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import pl.nogacz.chess.application.Resources;
 
+import java.io.Serializable;
+
 /**
  * @author Dawid Nogacz on 01.05.2019
  */
-public class PawnClass {
+public class PawnClass implements Serializable {
     private Pawn pawn;
     private PawnColor color;
 

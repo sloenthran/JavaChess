@@ -12,6 +12,7 @@ import java.util.Optional;
  * @author Dawid Nogacz on 07.05.2019
  */
 public class EndGame {
+    private SaveGame saveGame = new SaveGame();
 
     public EndGame(String message) {
         printDialog(message);
@@ -37,6 +38,7 @@ public class EndGame {
     }
 
     private void newGame() {
+        saveGame.remove();
         restartApplication();
     }
 

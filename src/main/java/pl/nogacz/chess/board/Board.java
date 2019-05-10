@@ -4,10 +4,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import pl.nogacz.chess.application.Computer;
-import pl.nogacz.chess.application.Design;
-import pl.nogacz.chess.application.EndGame;
-import pl.nogacz.chess.application.GameLogic;
+import pl.nogacz.chess.application.*;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
@@ -23,6 +20,8 @@ import java.util.Set;
  * @author Dawid Nogacz on 01.05.2019
  */
 public class Board {
+    private SaveGame saveGame = new SaveGame();
+
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private GameLogic gameLogic = new GameLogic();
     private boolean isGameEnd = false;
@@ -44,11 +43,23 @@ public class Board {
     private Set<Coordinates> possiblePawnIfKingIsChecked = new HashSet<>();
 
     public Board() {
-        addStartPawn();
+        if(saveGame.isSave()) {
+            saveGame.load();
+
+            for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
+                Design.addPawn(entry.getKey(), entry.getValue());
+            }
+        } else {
+            addStartPawn();
+        }
     }
 
     public static HashMap<Coordinates, PawnClass> getBoard() {
         return board;
+    }
+
+    public static void setBoard(HashMap<Coordinates, PawnClass> board) {
+        Board.board = board;
     }
 
     public static void addPossibleMovePromote(Set<Coordinates> coordinates) {
@@ -214,6 +225,8 @@ public class Board {
         } else {
             noMovePossibleInfo();
         }
+
+        saveGame.save();
     }
 
     private void endGame(String message) {
