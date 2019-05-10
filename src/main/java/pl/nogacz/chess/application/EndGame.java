@@ -34,6 +34,7 @@ public class EndGame {
         if (result.get() == newGameButton){
             newGame();
         } else {
+            saveGame.remove();
             System.exit(0);
         }
     }
