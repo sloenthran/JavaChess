@@ -99,5 +99,7 @@ public class SaveGame {
     public void remove() {
         File tempFile = new File("boardData.dat");
         tempFile.delete();
+        tempFile = new File("chessNotationData.dat");
+        tempFile.delete();
     }
 }

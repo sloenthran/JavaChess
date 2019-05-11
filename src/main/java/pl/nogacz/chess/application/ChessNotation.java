@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * @author Dawid Nogacz on 11.05.2019
  */
+//TODO Add check and checkmate
 public class ChessNotation implements Serializable {
     private static List<String> movesList = new ArrayList<>();
 
