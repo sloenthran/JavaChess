@@ -3,8 +3,6 @@ package pl.nogacz.chess.board;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.*;
 import pl.nogacz.chess.pawns.Pawn;
@@ -106,7 +104,8 @@ public class Board {
             return;
         }
 
-        Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 39) / 84), (int) ((event.getY() - 39) / 85));
+        Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 37) / 84), (int) ((event.getY() - 37) / 84));
+
         gameLogic.prepareData();
 
         if(!gameLogic.isMovePossible()) {
@@ -153,12 +152,6 @@ public class Board {
                     }
                 }
             }
-        }
-    }
-
-    public void readKeyboard(KeyEvent event) {
-        if(event.getCode().equals(KeyCode.R) || event.getCode().equals(KeyCode.N)) {
-            new EndGame("").newGame();
         }
     }
 

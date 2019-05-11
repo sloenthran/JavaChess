@@ -3,6 +3,8 @@ package pl.nogacz.chess.application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -13,58 +15,101 @@ import pl.nogacz.chess.pawns.PawnClass;
  * @author Dawid Nogacz on 01.05.2019
  */
 public class Design {
-    private static GridPane grid = new GridPane();
+    private static BorderPane borderPane = new BorderPane();
+    private static GridPane gridPane = new GridPane();
+    private VBox vBox = new VBox();
+    private HBox hBox = new HBox();
     private static Image lightMove = new Image(Resources.getPath("light.png"));
 
     public Design() {
-        createBackground();
+        createBoardBackground();
         generateEmptyBoard();
+        createFieldForChessNotation();
+        createTopMenu();
+
+        borderPane.setCenter(gridPane);
+        borderPane.setRight(vBox);
+        borderPane.setTop(hBox);
     }
 
-    public GridPane getGrid() {
-        return grid;
+    public BorderPane getBorderPane() {
+        return borderPane;
     }
 
-    private void createBackground() {
+    public GridPane getGridPane() {
+        return gridPane;
+    }
+
+    private void createBoardBackground() {
         Image background = new Image(Resources.getPath("board.png"));
-        BackgroundSize backgroundSize = new BackgroundSize(100, 100, true, true, true, false);
+        BackgroundSize backgroundSize = new BackgroundSize(750, 750, false, false, true, false);
         BackgroundImage backgroundImage = new BackgroundImage(background, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, backgroundSize);
-        grid.setBackground(new Background(backgroundImage));
+        gridPane.setBackground(new Background(backgroundImage));
+
+        hBox.setPadding(new Insets(15, 12, 15, 12));
+        hBox.setSpacing(10);
+        hBox.setStyle("-fx-background-image: url('background.png');");
     }
 
     private void generateEmptyBoard() {
+        gridPane.setMinSize(750, 750);
+        gridPane.setMaxSize(750, 750);
+
         for (int i = 0; i < 8; i++) {
             ColumnConstraints column = new ColumnConstraints(84);
             column.setHgrow(Priority.ALWAYS);
             column.setHalignment(HPos.CENTER);
-            grid.getColumnConstraints().add(column);
+            gridPane.getColumnConstraints().add(column);
 
-            RowConstraints row = new RowConstraints(85);
+            RowConstraints row = new RowConstraints(84);
             row.setVgrow(Priority.ALWAYS);
             row.setValignment(VPos.CENTER);
-            grid.getRowConstraints().add(row);
+            gridPane.getRowConstraints().add(row);
         }
 
-        grid.setPadding(new Insets(39));
+        gridPane.setPadding(new Insets(37, 0, 0, 37));
+    }
+
+    private void createFieldForChessNotation() {
+
+        TextArea textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setMinHeight(750);
+        textArea.setMaxHeight(750);
+        textArea.setText("ADSAD\nASDASD\nA\nASD\n");
+
+        vBox.getChildren().add(textArea);
+    }
+
+    public void createTopMenu() {
+        Button newGame = new Button("New game");
+        newGame.setPrefSize(100, 20);
+        newGame.setOnMouseClicked(event -> new EndGame("").newGame());
+
+        Button exitGame = new Button("Exit game");
+        exitGame.setPrefSize(100, 20);
+        exitGame.setOnMouseClicked(event -> System.exit(0));
+
+        hBox.getChildren().addAll(newGame, exitGame);
     }
 
     public static void addPawn(Coordinates coordinates, PawnClass pawn) {
-        grid.add(pawn.getImage(), coordinates.getX(), coordinates.getY());
+        gridPane.add(pawn.getImage(), coordinates.getX(), coordinates.getY());
     }
 
     public static void addLightPawn(Coordinates coordinates, PawnClass pawn) {
-        grid.add(pawn.getLightImage(), coordinates.getX(), coordinates.getY());
+        gridPane.add(pawn.getLightImage(), coordinates.getX(), coordinates.getY());
     }
 
     public static void addCheckedPawn(Coordinates coordinates, PawnClass pawn) {
-        grid.add(pawn.getCheckedImage(), coordinates.getX(), coordinates.getY());
+        gridPane.add(pawn.getCheckedImage(), coordinates.getX(), coordinates.getY());
     }
 
     public static void addLightMove(Coordinates coordinates) {
-        grid.add(new ImageView(lightMove), coordinates.getX(), coordinates.getY());
+        gridPane.add(new ImageView(lightMove), coordinates.getX(), coordinates.getY());
     }
 
     public static void removePawn(Coordinates coordinates) {
-        grid.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == coordinates.getX() && GridPane.getRowIndex(node) == coordinates.getY());
+        gridPane.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == coordinates.getX() && GridPane.getRowIndex(node) == coordinates.getY());
     }
 }

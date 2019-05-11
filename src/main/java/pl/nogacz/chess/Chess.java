@@ -2,6 +2,7 @@ package pl.nogacz.chess;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pl.nogacz.chess.application.Design;
@@ -21,9 +22,8 @@ public class Chess extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Scene scene = new Scene(design.getGrid(), 750, 750, Color.BLACK);
-        scene.setOnMouseClicked(event -> board.readMouseEvent(event));
-        scene.setOnKeyReleased(event -> board.readKeyboard(event));
+        Scene scene = new Scene(design.getBorderPane(), 900, 790, Color.BLACK);
+        design.getGridPane().setOnMouseClicked(event -> board.readMouseEvent(event));
 
         primaryStage.setTitle("Sloenthran :: Chess");
         primaryStage.setScene(scene);
