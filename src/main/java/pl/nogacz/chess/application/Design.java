@@ -18,6 +18,7 @@ public class Design {
     private static BorderPane borderPane = new BorderPane();
     private static GridPane gridPane = new GridPane();
     private VBox vBox = new VBox();
+    private static TextArea textArea = new TextArea();
     private HBox hBox = new HBox();
     private static Image lightMove = new Image(Resources.getPath("light.png"));
 
@@ -71,12 +72,9 @@ public class Design {
     }
 
     private void createFieldForChessNotation() {
-
-        TextArea textArea = new TextArea();
         textArea.setEditable(false);
         textArea.setMinHeight(750);
         textArea.setMaxHeight(750);
-        textArea.setText("ADSAD\nASDASD\nA\nASD\n");
 
         vBox.getChildren().add(textArea);
     }
@@ -111,5 +109,9 @@ public class Design {
 
     public static void removePawn(Coordinates coordinates) {
         gridPane.getChildren().removeIf(node -> GridPane.getColumnIndex(node) == coordinates.getX() && GridPane.getRowIndex(node) == coordinates.getY());
+    }
+
+    public static void setTextInTextArea(String text) {
+        textArea.setText(text);
     }
 }

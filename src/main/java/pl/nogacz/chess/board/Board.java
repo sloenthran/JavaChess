@@ -3,6 +3,8 @@ package pl.nogacz.chess.board;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.*;
 import pl.nogacz.chess.pawns.Pawn;
@@ -21,6 +23,7 @@ import java.util.Set;
  */
 public class Board {
     private SaveGame saveGame = new SaveGame();
+    private ChessNotation chessNotation = new ChessNotation();
 
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private GameLogic gameLogic = new GameLogic();
@@ -128,6 +131,8 @@ public class Board {
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, eventCoordinates);
 
+                    chessNotation.addMovement(selectedCoordinates, eventCoordinates, getPawn(eventCoordinates));
+
                     selectedCoordinates = null;
                     isSelected = false;
                     isKingChecked = false;
@@ -155,6 +160,12 @@ public class Board {
         }
     }
 
+    public void readKeyboard(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.R) || event.getCode().equals(KeyCode.N)) {
+            new EndGame("").newGame();
+        }
+    }
+
     private void computerMove() {
         Task<Void> computerSleep = new Task<Void>() {
             @Override
@@ -178,11 +189,15 @@ public class Board {
                         unLightSelect(selectedCoordinates);
                         movePawn(selectedCoordinates, moveCoordinates);
 
+                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
+
                         checkPromote(moveCoordinates, 1);
                     } else if(possibleMoves.size() > 0) {
                         Coordinates moveCoordinates = computer.selectRandom(possibleMoves);
                         unLightSelect(selectedCoordinates);
                         movePawn(selectedCoordinates, moveCoordinates);
+
+                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
 
                         checkPromote(moveCoordinates, 1);
                     } else {
@@ -195,11 +210,14 @@ public class Board {
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, moveCoordinates);
 
+                    chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
+
                     checkPromote(moveCoordinates, 1);
                 }
 
                 isComputerRound = false;
                 selectedCoordinates = null;
+                chessNotation.saveRound();
                 saveGame.save();
             }
         });
