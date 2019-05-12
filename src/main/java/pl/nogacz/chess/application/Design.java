@@ -94,7 +94,7 @@ public class Design {
 
         Button statistics = new Button("Statistics");
         statistics.setPrefSize(100, 20);
-        statistics.setOnMouseClicked(event -> new Statistics());
+        statistics.setOnMouseClicked(event -> new Statistics().printInfo());
 
         Button author = new Button("Author");
         author.setPrefSize(100, 20);

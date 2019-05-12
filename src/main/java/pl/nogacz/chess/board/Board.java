@@ -8,6 +8,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.*;
 import pl.nogacz.chess.application.menu.EndGame;
+import pl.nogacz.chess.application.menu.Statistics;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
@@ -25,6 +26,7 @@ import java.util.Set;
 public class Board {
     private SaveGame saveGame = new SaveGame();
     private ChessNotation chessNotation = new ChessNotation();
+    private Statistics statistics = new Statistics();
 
     private static HashMap<Coordinates, PawnClass> board = new HashMap<>();
     private GameLogic gameLogic = new GameLogic();
@@ -115,6 +117,7 @@ public class Board {
         if(!gameLogic.isMovePossible()) {
             noMovePossibleInfo();
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
+            statistics.addGameLoss();
             endGame("You loss. Maybe you try again?");
         } else if(eventCoordinates.isValid()) {
 
@@ -202,6 +205,7 @@ public class Board {
 
                         checkPromote(moveCoordinates, 1);
                     } else {
+                        statistics.addGameWin();
                         endGame("You win! Congratulations :)");
                     }
 
@@ -231,6 +235,7 @@ public class Board {
             possiblePawnIfKingIsChecked = gameLogic.getPossiblePawnIfKingIsChecked(PawnColor.BLACK);
 
             if(possiblePawnIfKingIsChecked.size() == 0) {
+                statistics.addGameWin();
                 endGame("You win! Congratulations! :)");
             } else {
                 selectedCoordinates = computer.selectRandom(possiblePawnIfKingIsChecked);
@@ -256,9 +261,9 @@ public class Board {
 
     private void noMovePossibleInfo() {
         switch(gameLogic.getWinner()) {
-            case DRAW_COLOR: { endGame("Draw. Maybe you try again?"); break; }
-            case WHITE: { endGame("You win! Congratulations! :)"); break; }
-            case BLACK: { endGame("You loss. Maybe you try again?"); break; }
+            case DRAW_COLOR: { statistics.addGameDraw(); endGame("Draw. Maybe you try again?"); break; }
+            case WHITE: { statistics.addGameWin(); endGame("You win! Congratulations! :)"); break; }
+            case BLACK: { statistics.addGameLoss(); endGame("You loss. Maybe you try again?"); break; }
         }
     }
 
