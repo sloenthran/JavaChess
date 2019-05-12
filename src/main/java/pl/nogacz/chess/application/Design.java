@@ -9,7 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import pl.nogacz.chess.application.menu.AuthorInfo;
+import pl.nogacz.chess.application.menu.Difficulty;
 import pl.nogacz.chess.application.menu.EndGame;
+import pl.nogacz.chess.application.menu.Statistics;
 import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 
@@ -86,6 +88,14 @@ public class Design {
         newGame.setPrefSize(100, 20);
         newGame.setOnMouseClicked(event -> new EndGame("").newGame());
 
+        Button difficulty = new Button("Difficulty");
+        difficulty.setPrefSize(100, 20);
+        difficulty.setOnMouseClicked(event -> new Difficulty());
+
+        Button statistics = new Button("Statistics");
+        statistics.setPrefSize(100, 20);
+        statistics.setOnMouseClicked(event -> new Statistics());
+
         Button author = new Button("Author");
         author.setPrefSize(100, 20);
         author.setOnMouseClicked(event -> new AuthorInfo());
@@ -94,7 +104,7 @@ public class Design {
         exitGame.setPrefSize(100, 20);
         exitGame.setOnMouseClicked(event -> System.exit(0));
 
-        hBox.getChildren().addAll(newGame, author, exitGame);
+        hBox.getChildren().addAll(newGame, difficulty, statistics, author, exitGame);
     }
 
     public static void addPawn(Coordinates coordinates, PawnClass pawn) {
