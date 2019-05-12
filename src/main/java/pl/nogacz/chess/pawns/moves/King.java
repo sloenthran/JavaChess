@@ -53,7 +53,7 @@ public class King implements PawnMovesInterface {
                             possibleKick.add(coordinates);
                         }
                     }
-                } else {
+                } else if(coordinates != actualCoordinates) {
                     possibleMoves.add(coordinates);
                 }
             }
