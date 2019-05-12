@@ -36,11 +36,11 @@ public class GameLogic {
             PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
 
             if(entry.getValue().getColor().isBlack()) {
-                pawnWhiteCount++;
+                pawnBlackCount++;
                 possibleMovesBlack.addAll(moves.getPossibleKick());
                 possibleMovesBlack.addAll(moves.getPossibleMoves());
             } else {
-                pawnBlackCount++;
+                pawnWhiteCount++;
                 possibleMovesWhite.addAll(moves.getPossibleKick());
                 possibleMovesWhite.addAll(moves.getPossibleMoves());
             }

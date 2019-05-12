@@ -117,8 +117,13 @@ public class Board {
         if(!gameLogic.isMovePossible()) {
             noMovePossibleInfo();
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
-            statistics.addGameLoss();
-            endGame("You loss. Maybe you try again?");
+            if(gameLogic.isKingChecked(PawnColor.WHITE)) {
+                statistics.addGameWin();
+                endGame("You win! Congratulations :)");
+            } else {
+                statistics.addGameLoss();
+                endGame("You loss. Maybe you try again?");
+            }
         } else if(eventCoordinates.isValid()) {
 
             if(isSelected) {
@@ -263,7 +268,7 @@ public class Board {
         switch(gameLogic.getWinner()) {
             case DRAW_COLOR: { statistics.addGameDraw(); endGame("Draw. Maybe you try again?"); break; }
             case WHITE: { statistics.addGameWin(); endGame("You win! Congratulations! :)"); break; }
-            case BLACK: { statistics.addGameLoss(); endGame("You loss. Maybe you try again?"); break; }
+            case BLACK: { System.out.println("It is!"); statistics.addGameLoss(); endGame("You loss. Maybe you try again?"); break; }
         }
     }
 
