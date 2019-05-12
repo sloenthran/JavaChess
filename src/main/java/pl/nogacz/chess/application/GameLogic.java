@@ -14,7 +14,6 @@ import java.util.Set;
 /**
  * @author Dawid Nogacz on 05.05.2019
  */
-//TODO Add game draw
 public class GameLogic {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private PawnColor winner;
@@ -30,24 +29,30 @@ public class GameLogic {
     public boolean isMovePossible() {
         Set<Coordinates> possibleMovesWhite = new HashSet<>();
         Set<Coordinates> possibleMovesBlack = new HashSet<>();
+        int pawnWhiteCount = 0;
+        int pawnBlackCount = 0;
 
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
             PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
 
             if(entry.getValue().getColor().isBlack()) {
+                pawnWhiteCount++;
                 possibleMovesBlack.addAll(moves.getPossibleKick());
                 possibleMovesBlack.addAll(moves.getPossibleMoves());
             } else {
+                pawnBlackCount++;
                 possibleMovesWhite.addAll(moves.getPossibleKick());
                 possibleMovesWhite.addAll(moves.getPossibleMoves());
             }
         }
 
-        if(possibleMovesWhite.size() == 0 && possibleMovesBlack.size() == 0) {
-            winner = null;
-        } else if(possibleMovesWhite.size() == 0) {
+        if(possibleMovesWhite.size() == 0 && possibleMovesBlack.size() == 0 || pawnBlackCount == 1 && pawnWhiteCount == 1) {
+            winner = PawnColor.DRAW_COLOR;
+            possibleMovesBlack.clear();
+            possibleMovesWhite.clear();
+        } else if(possibleMovesWhite.size() == 0 || pawnWhiteCount == 1) {
             winner = PawnColor.BLACK;
-        } else if(possibleMovesBlack.size() == 0) {
+        } else if(possibleMovesBlack.size() == 0 || pawnBlackCount == 1) {
             winner = PawnColor.WHITE;
         }
 

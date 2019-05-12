@@ -256,9 +256,9 @@ public class Board {
 
     private void noMovePossibleInfo() {
         switch(gameLogic.getWinner()) {
+            case DRAW_COLOR: { endGame("Draw. Maybe you try again?"); break; }
             case WHITE: { endGame("You win! Congratulations! :)"); break; }
             case BLACK: { endGame("You loss. Maybe you try again?"); break; }
-            default: { endGame("Draw. Maybe you try again?"); break; }
         }
     }
 
