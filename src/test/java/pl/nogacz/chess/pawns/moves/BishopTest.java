@@ -14,8 +14,6 @@ import pl.nogacz.chess.pawns.PawnColor;
 
 import java.util.Set;
 
-import static org.junit.Assert.*;
-
 /**
  * @author Dawid Nogacz on 05.05.2019
  */
