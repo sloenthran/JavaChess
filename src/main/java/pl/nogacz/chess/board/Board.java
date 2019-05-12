@@ -7,6 +7,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import pl.nogacz.chess.application.*;
+import pl.nogacz.chess.application.menu.EndGame;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
@@ -131,7 +132,7 @@ public class Board {
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, eventCoordinates);
 
-                    chessNotation.addMovement(selectedCoordinates, eventCoordinates, getPawn(eventCoordinates));
+                    chessNotation.addMovement(selectedCoordinates, eventCoordinates, getPawn(eventCoordinates), possibleKick.contains(eventCoordinates));
 
                     selectedCoordinates = null;
                     isSelected = false;
@@ -189,7 +190,7 @@ public class Board {
                         unLightSelect(selectedCoordinates);
                         movePawn(selectedCoordinates, moveCoordinates);
 
-                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
+                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates), possibleKick.contains(moveCoordinates));
 
                         checkPromote(moveCoordinates, 1);
                     } else if(possibleMoves.size() > 0) {
@@ -197,7 +198,7 @@ public class Board {
                         unLightSelect(selectedCoordinates);
                         movePawn(selectedCoordinates, moveCoordinates);
 
-                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
+                        chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates), false);
 
                         checkPromote(moveCoordinates, 1);
                     } else {
@@ -210,7 +211,7 @@ public class Board {
                     unLightSelect(selectedCoordinates);
                     movePawn(selectedCoordinates, moveCoordinates);
 
-                    chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates));
+                    chessNotation.addMovement(selectedCoordinates, moveCoordinates, getPawn(moveCoordinates), possibleKick.contains(moveCoordinates));
 
                     checkPromote(moveCoordinates, 1);
                 }

@@ -8,6 +8,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import pl.nogacz.chess.application.menu.AuthorInfo;
+import pl.nogacz.chess.application.menu.EndGame;
 import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 
@@ -84,11 +86,15 @@ public class Design {
         newGame.setPrefSize(100, 20);
         newGame.setOnMouseClicked(event -> new EndGame("").newGame());
 
+        Button author = new Button("Author");
+        author.setPrefSize(100, 20);
+        author.setOnMouseClicked(event -> new AuthorInfo());
+
         Button exitGame = new Button("Exit game");
         exitGame.setPrefSize(100, 20);
         exitGame.setOnMouseClicked(event -> System.exit(0));
 
-        hBox.getChildren().addAll(newGame, exitGame);
+        hBox.getChildren().addAll(newGame, author, exitGame);
     }
 
     public static void addPawn(Coordinates coordinates, PawnClass pawn) {

@@ -117,7 +117,7 @@ public class GameLogic {
         Set<Coordinates> possibleCheck = getPossibleCheck(pawn.getColor());
 
         for(Coordinates kickCoordinates : moves.getPossibleKick()) {
-            if(possibleCheck.contains(kickCoordinates)) {
+            if(possibleCheck.contains(kickCoordinates) && !Board.getPawn(kickCoordinates).getPawn().isKing()) {
                 possibleKick.add(kickCoordinates);
             }
         }

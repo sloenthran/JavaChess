@@ -14,8 +14,8 @@ import java.util.List;
 public class ChessNotation implements Serializable {
     private static List<String> movesList = new ArrayList<>();
 
-    private String playerMove = null;
-    private String computerMove = null;
+    private String playerMove = "";
+    private String computerMove = "";
 
     public static List<String> getMovesList() {
         return movesList;
@@ -26,19 +26,19 @@ public class ChessNotation implements Serializable {
         updateTextArea();
     }
 
-    public void addMovement(Coordinates oldCoordinates, Coordinates newCoordinates, PawnClass pawn) {
+    public void addMovement(Coordinates oldCoordinates, Coordinates newCoordinates, PawnClass pawn, boolean isKick) {
         if(pawn.getColor().isWhite()) {
-            playerMove = getPawnInNotation(pawn) + getCoordinatesInNotation(oldCoordinates) + getCoordinatesInNotation(newCoordinates);
+            playerMove = getPawnInNotation(pawn) + getKick(isKick) + getCoordinatesInNotation(oldCoordinates) + getCoordinatesInNotation(newCoordinates);
         } else {
-            computerMove = getPawnInNotation(pawn) + getCoordinatesInNotation(oldCoordinates) + getCoordinatesInNotation(newCoordinates);
+            computerMove = getPawnInNotation(pawn) + getKick(isKick) + getCoordinatesInNotation(oldCoordinates) + getCoordinatesInNotation(newCoordinates);
         }
     }
 
     public void saveRound() {
         movesList.add(playerMove + " " + computerMove);
 
-        playerMove = null;
-        computerMove = null;
+        playerMove = "";
+        computerMove = "";
 
         updateTextArea();
     }
@@ -93,6 +93,14 @@ public class ChessNotation implements Serializable {
             case 5: return "3";
             case 6: return "2";
             default: return "1";
+        }
+    }
+
+    private String getKick(boolean isKick) {
+        if(isKick) {
+            return "x";
+        } else {
+            return "";
         }
     }
 }

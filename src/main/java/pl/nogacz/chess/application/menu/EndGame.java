@@ -1,8 +1,9 @@
-package pl.nogacz.chess.application;
+package pl.nogacz.chess.application.menu;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import pl.nogacz.chess.Chess;
+import pl.nogacz.chess.application.SaveGame;
 
 import java.io.File;
 import java.util.ArrayList;
