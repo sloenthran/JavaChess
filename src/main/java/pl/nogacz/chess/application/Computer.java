@@ -15,7 +15,7 @@ import java.util.zip.GZIPOutputStream;
 /**
  * @author Dawid Nogacz on 01.05.2019
  */
-//TODO Add hard & easy skill
+//TODO Add hard skill
 public class Computer {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private Random random = new Random();
@@ -69,7 +69,6 @@ public class Computer {
     }
 
     public void setSkill(int skill) {
-        System.out.println(skill);
         this.skill = skill;
 
         remove();
@@ -98,8 +97,22 @@ public class Computer {
 
     public Coordinates choosePawn() {
         switch(skill) {
+            case 1: return choosePawnEasy();
             default: return choosePawnNormal();
         }
+    }
+
+    private Coordinates choosePawnEasy() {
+        Object[] object = null;
+
+        if(possibleMoves.size() > 0) {
+            object = possibleMoves.toArray();
+        } else if(possibleKick.size() > 0) {
+            object = possibleKick.toArray();
+
+        }
+
+        return (Coordinates) object[random.nextInt(object.length)];
     }
 
     private Coordinates choosePawnNormal() {
@@ -117,8 +130,24 @@ public class Computer {
 
     public Coordinates chooseMove(Coordinates coordinates) {
         switch(skill) {
+            case 1: return chooseMoveEasy(coordinates);
             default: return chooseMoveNormal(coordinates);
         }
+    }
+
+    private Coordinates chooseMoveEasy(Coordinates coordinates) {
+        PawnClass pawn = Board.getPawn(coordinates);
+        PawnMoves moves = new PawnMoves(pawn, coordinates);
+
+        if(moves.getPossibleMoves().size() > 0){
+            Object[] object = moves.getPossibleMoves().toArray();
+            return (Coordinates) object[random.nextInt(object.length)];
+        } else if(moves.getPossibleKick().size() > 0) {
+            Object[] object = moves.getPossibleKick().toArray();
+            return (Coordinates) object[random.nextInt(object.length)];
+        }
+
+        return null;
     }
 
     private Coordinates chooseMoveNormal(Coordinates coordinates) {
