@@ -22,7 +22,7 @@ public class EndGame {
 
     public void printDialog() {
         Alert alert = new Alert(Alert.AlertType.NONE);
-        alert.setTitle("Sloenthran :: Chess");
+        alert.setTitle("JavaChess");
         alert.setContentText(message);
 
         ButtonType newGameButton = new ButtonType("New game");

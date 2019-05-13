@@ -15,7 +15,7 @@ import java.util.zip.GZIPOutputStream;
  */
 public class SaveGame {
     public boolean isSave() {
-        File tempFile = new File("boardData.dat");
+        File tempFile = new File("gameCache/board.dat");
         return tempFile.exists();
     }
 
@@ -26,7 +26,7 @@ public class SaveGame {
 
     private void saveBoard() {
         try {
-            File file = new File("boardData.dat");
+            File file = new File("gameCache/board.dat");
             ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
             output.writeObject(Board.getBoard());
             output.flush();
@@ -38,7 +38,7 @@ public class SaveGame {
 
     private void saveChessNotation() {
         try {
-            File file = new File("chessNotationData.dat");
+            File file = new File("gameCache/chessNotation.dat");
             ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
             output.writeObject(ChessNotation.getMovesList());
             output.flush();
@@ -55,7 +55,7 @@ public class SaveGame {
 
     private void loadBoard() {
         try {
-            Object readObject = readObject(new File("chessNotationData.dat"));
+            Object readObject = readObject(new File("gameCache/chessNotation.dat"));
 
             if(!(readObject instanceof List)) throw new Exception("Data is not a List");
 
@@ -69,7 +69,7 @@ public class SaveGame {
 
     private void loadChessNotation() {
         try {
-            Object readObject = readObject(new File("boardData.dat"));
+            Object readObject = readObject(new File("gameCache/board.dat"));
 
             if(!(readObject instanceof HashMap)) throw new Exception("Data is not a HashMap");
 
@@ -97,9 +97,9 @@ public class SaveGame {
     }
 
     public void remove() {
-        File tempFile = new File("boardData.dat");
+        File tempFile = new File("gameCache/board.dat");
         tempFile.delete();
-        tempFile = new File("chessNotationData.dat");
+        tempFile = new File("gameCache/chessNotation.dat");
         tempFile.delete();
     }
 }

@@ -2,7 +2,5 @@
 .idea
 /build
 .gradle
-boardData.dat
-chessNotationData.dat
-statistics.dat
+/gameCache
 JavaChess.jar

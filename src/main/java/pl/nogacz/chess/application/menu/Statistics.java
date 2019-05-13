@@ -53,7 +53,7 @@ public class Statistics implements Serializable {
     }
 
     private boolean isExists() {
-        File tempFile = new File("statistics.dat");
+        File tempFile = new File("gameCache/statistics.dat");
         return tempFile.exists();
     }
 
@@ -64,7 +64,7 @@ public class Statistics implements Serializable {
             stats.add(gameLoss);
             stats.add(gameDraw);
 
-            File file = new File("statistics.dat");
+            File file = new File("gameCache/statistics.dat");
             ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
             output.writeObject(stats);
             output.flush();
@@ -76,7 +76,7 @@ public class Statistics implements Serializable {
 
     private void load() {
         try {
-            File file = new File("statistics.dat");
+            File file = new File("gameCache/statistics.dat");
             ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
 
             Object readObject = input.readObject();
@@ -95,7 +95,7 @@ public class Statistics implements Serializable {
     }
 
     private void remove() {
-        File tempFile = new File("statistics.dat");
+        File tempFile = new File("gameCache/statistics.dat");
         tempFile.delete();
     }
 

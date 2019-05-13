@@ -7,17 +7,74 @@ import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
 import pl.nogacz.chess.pawns.moves.PawnMoves;
 
+import java.io.*;
 import java.util.*;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author Dawid Nogacz on 01.05.2019
  */
+//TODO Add hard & easy skill
 public class Computer {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private Random random = new Random();
+    private int skill = 0; // 0 - Normal || 1 - Easy || 2 - Hard
 
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
+
+    public Computer() {
+        if(isExists()) {
+            load();
+        } else {
+            save();
+        }
+    }
+
+    private boolean isExists() {
+        File tempFile = new File("gameCache/computer.dat");
+        return tempFile.exists();
+    }
+
+    private void save() {
+        try {
+            File file = new File("gameCache/computer.dat");
+            ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+            output.writeObject(skill);
+            output.flush();
+            output.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void load() {
+        try {
+            File file = new File("gameCache/computer.dat");
+            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
+
+            Object readObject = input.readObject();
+            input.close();
+
+            skill = (int) readObject;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void remove() {
+        File tempFile = new File("gameCache/computer.dat");
+        tempFile.delete();
+    }
+
+    public void setSkill(int skill) {
+        System.out.println(skill);
+        this.skill = skill;
+
+        remove();
+        save();
+    }
 
     public void getGameData() {
         cacheBoard = new HashMap<>(Board.getBoard());
@@ -40,6 +97,12 @@ public class Computer {
     }
 
     public Coordinates choosePawn() {
+        switch(skill) {
+            default: return choosePawnNormal();
+        }
+    }
+
+    private Coordinates choosePawnNormal() {
         Object[] object = null;
 
         if(possibleKick.size() > 0) {
@@ -53,6 +116,12 @@ public class Computer {
     }
 
     public Coordinates chooseMove(Coordinates coordinates) {
+        switch(skill) {
+            default: return chooseMoveNormal(coordinates);
+        }
+    }
+
+    private Coordinates chooseMoveNormal(Coordinates coordinates) {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 

@@ -32,7 +32,7 @@ public class Board {
     private GameLogic gameLogic = new GameLogic();
     private boolean isGameEnd = false;
 
-    private Computer computer = new Computer();
+    private static Computer computer = new Computer();
     private boolean isComputerRound = false;
 
     private PawnPromote pawnPromote = new PawnPromote();
@@ -175,6 +175,10 @@ public class Board {
         }
     }
 
+    public static void setComputerSkill(int skill) {
+        computer.setSkill(skill);
+    }
+
     private void computerMove() {
         Task<Void> computerSleep = new Task<Void>() {
             @Override
@@ -268,7 +272,7 @@ public class Board {
         switch(gameLogic.getWinner()) {
             case DRAW_COLOR: { statistics.addGameDraw(); endGame("Draw. Maybe you try again?"); break; }
             case WHITE: { statistics.addGameWin(); endGame("You win! Congratulations! :)"); break; }
-            case BLACK: { System.out.println("It is!"); statistics.addGameLoss(); endGame("You loss. Maybe you try again?"); break; }
+            case BLACK: { statistics.addGameLoss(); endGame("You loss. Maybe you try again?"); break; }
         }
     }
 
