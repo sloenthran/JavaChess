@@ -98,10 +98,8 @@ public class Computer {
 
     public Coordinates choosePawn() {
         switch (skill) {
-            case 1:
-                return choosePawnEasy();
-            default:
-                return choosePawnNormal();
+            case 1: return choosePawnEasy();
+            default: return choosePawnNormal();
         }
     }
 
