@@ -24,6 +24,8 @@ public class Computer {
     private Set<Coordinates> possibleMoves = new HashSet<>();
     private Set<Coordinates> possibleKickAndNotIsEnemyKickMe = new HashSet<>();
 
+    private BoardPoint boardPoint = new BoardPoint();
+
     public Computer() {
         if (isExists()) {
             load();
@@ -99,6 +101,7 @@ public class Computer {
     public Coordinates choosePawn() {
         switch (skill) {
             case 1: return choosePawnEasy();
+            case 2: return choosePawnHard();
             default: return choosePawnNormal();
         }
     }
@@ -126,6 +129,59 @@ public class Computer {
         }
 
         return (Coordinates) object[random.nextInt(object.length)];
+    }
+
+    private Coordinates choosePawnHard() {
+        int minNumber = -1000;
+
+        Set<Coordinates> cachePawn = new HashSet<>();
+        cachePawn.addAll(possibleKick);
+        cachePawn.addAll(possibleMoves);
+
+        Set<Coordinates> cachePossiblePawn = new HashSet<>();
+
+        for(Coordinates coordinates : cachePawn) {
+
+            PawnMoves moves = new PawnMoves(Board.getPawn(coordinates), coordinates);
+
+            Set<Coordinates> cacheMoves = new HashSet<>();
+            cacheMoves.addAll(moves.getPossibleKick());
+            cacheMoves.addAll(moves.getPossibleMoves());
+
+            for(Coordinates moveCoordinates : cacheMoves) {
+                PawnClass oldPawn = Board.addPawnWithoutDesign(moveCoordinates, Board.getPawn(coordinates));
+
+                int point = boardPoint.calculateBoard();
+
+                if(point > minNumber) {
+                    minNumber = point;
+                }
+
+                Board.removePawnWithoutDesign(moveCoordinates);
+
+                if (oldPawn != null) {
+                    Board.addPawnWithoutDesign(moveCoordinates, oldPawn);
+                }
+            }
+
+            for(Coordinates moveCoordinates : cacheMoves) {
+                PawnClass oldPawn = Board.addPawnWithoutDesign(moveCoordinates, Board.getPawn(coordinates));
+
+                int point = boardPoint.calculateBoard();
+
+                if(point == minNumber) {
+                    cachePossiblePawn.add(coordinates);
+                }
+
+                Board.removePawnWithoutDesign(moveCoordinates);
+
+                if (oldPawn != null) {
+                    Board.addPawnWithoutDesign(moveCoordinates, oldPawn);
+                }
+            }
+        }
+
+        return (Coordinates) cachePossiblePawn.toArray()[random.nextInt(cachePossiblePawn.size())];
     }
 
     public Coordinates chooseMove(Coordinates coordinates) {

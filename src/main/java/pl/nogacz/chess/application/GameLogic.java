@@ -60,8 +60,6 @@ public class GameLogic {
             possibleMovesWhite.clear();
         }
 
-        System.out.println(pawnWhiteCount);
-
         return possibleMovesWhite.size() > 0 && possibleMovesBlack.size() > 0;
     }
 
