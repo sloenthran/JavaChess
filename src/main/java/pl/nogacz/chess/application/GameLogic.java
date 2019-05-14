@@ -52,9 +52,15 @@ public class GameLogic {
             possibleMovesWhite.clear();
         } else if(possibleMovesWhite.size() == 0 || pawnWhiteCount == 1) {
             winner = PawnColor.BLACK;
+            possibleMovesBlack.clear();
+            possibleMovesWhite.clear();
         } else if(possibleMovesBlack.size() == 0 || pawnBlackCount == 1) {
             winner = PawnColor.WHITE;
+            possibleMovesBlack.clear();
+            possibleMovesWhite.clear();
         }
+
+        System.out.println(pawnWhiteCount);
 
         return possibleMovesWhite.size() > 0 && possibleMovesBlack.size() > 0;
     }
