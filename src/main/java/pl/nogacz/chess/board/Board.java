@@ -279,6 +279,8 @@ public class Board {
     private void checkPromote(Coordinates coordinates, int type) {
         PawnClass pawn = getPawn(coordinates);
 
+        if(pawn.getPawn() != Pawn.PAWN) return;
+
         if(type == 0 && pawn.getColor().isWhite()) {
             if(possibleMovePromote.contains(coordinates)) {
                 pawnPromote.userPromote(coordinates);
