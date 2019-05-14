@@ -68,8 +68,15 @@ public class King implements PawnMovesInterface {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
                 possibleEnemyKick.addAll(moves.getPossibleKick());
                 possibleEnemyKick.addAll(moves.getPossibleCheck());
-            } else if(entry.getKey() == coordinates && entry.getValue().getPawn().isKing()) {
-                possibleEnemyKick.add(coordinates);
+            } else if(!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && entry.getValue().getPawn().isKing()) {
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY()));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY()));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX(), coordinates.getY() + 1));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX(), coordinates.getY() - 1));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY() + 1));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1));
+                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY() + 1));
             }
         }
 
