@@ -15,7 +15,6 @@ import java.util.zip.GZIPOutputStream;
 /**
  * @author Dawid Nogacz on 01.05.2019
  */
-//TODO Add hard skill
 public class Computer {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private Random random = new Random();
@@ -23,9 +22,10 @@ public class Computer {
 
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
+    private Set<Coordinates> possibleKickAndNotIsEnemyKickMe = new HashSet<>();
 
     public Computer() {
-        if(isExists()) {
+        if (isExists()) {
             load();
         } else {
             save();
@@ -80,15 +80,16 @@ public class Computer {
 
         possibleMoves.clear();
         possibleKick.clear();
+        possibleKickAndNotIsEnemyKickMe.clear();
 
-        for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
-            if(entry.getValue().getColor().isBlack()) {
+        for (Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
+            if (entry.getValue().getColor().isBlack()) {
                 PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
-                if(moves.getPossibleMoves().size() > 0) {
+                if (moves.getPossibleMoves().size() > 0) {
                     possibleMoves.add(entry.getKey());
                 }
 
-                if(moves.getPossibleKick().size() > 0) {
+                if (moves.getPossibleKick().size() > 0) {
                     possibleKick.add(entry.getKey());
                 }
             }
@@ -96,18 +97,20 @@ public class Computer {
     }
 
     public Coordinates choosePawn() {
-        switch(skill) {
-            case 1: return choosePawnEasy();
-            default: return choosePawnNormal();
+        switch (skill) {
+            case 1:
+                return choosePawnEasy();
+            default:
+                return choosePawnNormal();
         }
     }
 
     private Coordinates choosePawnEasy() {
         Object[] object = null;
 
-        if(possibleMoves.size() > 0) {
+        if (possibleMoves.size() > 0) {
             object = possibleMoves.toArray();
-        } else if(possibleKick.size() > 0) {
+        } else if (possibleKick.size() > 0) {
             object = possibleKick.toArray();
 
         }
@@ -118,19 +121,19 @@ public class Computer {
     private Coordinates choosePawnNormal() {
         Object[] object = null;
 
-        if(possibleKick.size() > 0) {
+        if (possibleKick.size() > 0) {
             object = possibleKick.toArray();
-        } else if(possibleMoves.size() > 0) {
+        } else if (possibleMoves.size() > 0) {
             object = possibleMoves.toArray();
-
         }
 
         return (Coordinates) object[random.nextInt(object.length)];
     }
 
     public Coordinates chooseMove(Coordinates coordinates) {
-        switch(skill) {
+        switch (skill) {
             case 1: return chooseMoveEasy(coordinates);
+            case 2: return chooseMoveHard(coordinates);
             default: return chooseMoveNormal(coordinates);
         }
     }
@@ -139,10 +142,10 @@ public class Computer {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        if(moves.getPossibleMoves().size() > 0){
+        if (moves.getPossibleMoves().size() > 0) {
             Object[] object = moves.getPossibleMoves().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
-        } else if(moves.getPossibleKick().size() > 0) {
+        } else if (moves.getPossibleKick().size() > 0) {
             Object[] object = moves.getPossibleKick().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
         }
@@ -154,11 +157,35 @@ public class Computer {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        if(moves.getPossibleKick().size() > 0) {
+        if (moves.getPossibleKick().size() > 0) {
             Object[] object = moves.getPossibleKick().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
-        } else if(moves.getPossibleMoves().size() > 0){
+        } else if (moves.getPossibleMoves().size() > 0) {
             Object[] object = moves.getPossibleMoves().toArray();
+            return (Coordinates) object[random.nextInt(object.length)];
+        }
+
+        return null;
+    }
+
+    private Coordinates chooseMoveHard(Coordinates coordinates) {
+        PawnClass pawn = Board.getPawn(coordinates);
+        PawnMoves moves = new PawnMoves(pawn, coordinates);
+
+        Object[] object = null;
+
+        if(moves.getPossibleKick().size() > 0) {
+            moves.getPossibleKick().forEach(entry -> checkEnemyKickField(entry, pawn));
+
+            if(possibleKickAndNotIsEnemyKickMe.size() > 0) {
+                object = possibleKickAndNotIsEnemyKickMe.toArray();
+            } else {
+                object = moves.getPossibleKick().toArray();
+            }
+
+            return (Coordinates) object[random.nextInt(object.length)];
+        } else if(moves.getPossibleMoves().size() > 0) {
+            object = moves.getPossibleMoves().toArray();
             return (Coordinates) object[random.nextInt(object.length)];
         }
 
@@ -168,5 +195,28 @@ public class Computer {
     public Coordinates selectRandom(Set<Coordinates> list) {
         Object[] object = list.toArray();
         return (Coordinates) object[random.nextInt(object.length)];
+    }
+
+    private void checkEnemyKickField(Coordinates coordinates, PawnClass actualPawn) {
+        PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
+
+        Set<Coordinates> possibleEnemyKick = new HashSet<>();
+
+        for (Map.Entry<Coordinates, PawnClass> entry : Board.getBoard().entrySet()) {
+            if (!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && !entry.getValue().getPawn().isKing()) {
+                PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
+                possibleEnemyKick.addAll(moves.getPossibleKick());
+            }
+        }
+
+        Board.removePawnWithoutDesign(coordinates);
+
+        if(oldPawn != null) {
+            Board.addPawnWithoutDesign(coordinates, oldPawn);
+        }
+
+        if(!possibleEnemyKick.contains(coordinates)) {
+            possibleKickAndNotIsEnemyKickMe.add(coordinates);
+        }
     }
 }
