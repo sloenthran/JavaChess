@@ -69,14 +69,14 @@ public class King implements PawnMovesInterface {
                 possibleEnemyKick.addAll(moves.getPossibleKick());
                 possibleEnemyKick.addAll(moves.getPossibleCheck());
             } else if(!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && entry.getValue().getPawn().isKing()) {
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY()));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY()));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX(), coordinates.getY() + 1));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX(), coordinates.getY() - 1));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY() + 1));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY() - 1));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() + 1, coordinates.getY() - 1));
-                possibleEnemyKick.add(new Coordinates(coordinates.getX() - 1, coordinates.getY() + 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() + 1, entry.getKey().getY()));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() - 1, entry.getKey().getY()));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX(), entry.getKey().getY() + 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX(), entry.getKey().getY() - 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() + 1, entry.getKey().getY() + 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() - 1, entry.getKey().getY() - 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() + 1, entry.getKey().getY() - 1));
+                possibleEnemyKick.add(new Coordinates(entry.getKey().getX() - 1, entry.getKey().getY() + 1));
             }
         }
 
