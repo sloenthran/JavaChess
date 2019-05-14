@@ -154,7 +154,21 @@ public class Computer {
             cacheMoves.addAll(moves.getPossibleKick());
             cacheMoves.addAll(moves.getPossibleMoves());
 
-            cachePossiblePawn.addAll(getListWithOnlyMinNumber(cacheMoves, Board.getPawn(coordinates), minNumber));
+            for(Coordinates moveCoordinates : cacheMoves) {
+                PawnClass oldPawn = Board.addPawnWithoutDesign(moveCoordinates, Board.getPawn(coordinates));
+
+                int point = boardPoint.calculateBoard();
+
+                if (point == minNumber) {
+                    cachePossiblePawn.add(coordinates);
+                }
+
+                Board.removePawnWithoutDesign(moveCoordinates);
+
+                if (oldPawn != null) {
+                    Board.addPawnWithoutDesign(moveCoordinates, oldPawn);
+                }
+            }
         }
 
         return selectRandom(cachePossiblePawn);
@@ -202,9 +216,7 @@ public class Computer {
         possibleMove.addAll(moves.getPossibleMoves());
         possibleMove.addAll(moves.getPossibleKick());
 
-        int minNumber = getMinNumber(possibleMove, pawn);
-
-        Set<Coordinates> test = getListWithOnlyMinNumber(possibleMove, pawn, minNumber);
+        Set<Coordinates> test = getListWithOnlyMinNumber(possibleMove, pawn);
 
         return selectRandom(test);
     }
@@ -231,7 +243,8 @@ public class Computer {
         return minNumber;
     }
 
-    private Set<Coordinates> getListWithOnlyMinNumber(Set<Coordinates> list, PawnClass actualPawn, int minNumber) {
+    private Set<Coordinates> getListWithOnlyMinNumber(Set<Coordinates> list, PawnClass actualPawn) {
+        int minNumber = getMinNumber(list, actualPawn);
         Set<Coordinates> returnList = new HashSet<>();
 
         for(Coordinates coordinates : list) {
