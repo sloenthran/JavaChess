@@ -2,7 +2,7 @@
 
 Chess game written in Java language.
 
-The game has a simple statistics system (winnings, losses, draws) and the ability to reset them, as well as record progress and a simple computer opponent with the possibility of changing its level of computer "advancement" as well as displaying movements in chess notation :)
+The game has a simple statistics system (winnings, losses, draws) and the ability to reset them, as well as record progress and a simple computer opponent with the possibility of changing its level of "advancement" as well as displaying movements in chess notation :)
 
 ![gameScreen](https://raw.githubusercontent.com/sloenthran/JavaChess/master/src/main/resources/screen.png)
 
