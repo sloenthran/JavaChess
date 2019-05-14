@@ -37,7 +37,7 @@ public class PawnClass implements Serializable {
     }
 
     public ImageView getCheckedImage() {
-        Image image = new Image(Resources.getPath("pawns/check_" + color + "_King.png"));
+        Image image = new Image(Resources.getPath("pawns/check_" + color + "_KING.png"));
         return new ImageView(image);
     }
 }
