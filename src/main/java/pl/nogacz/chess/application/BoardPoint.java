@@ -25,18 +25,16 @@ public class BoardPoint {
             if(entry.getValue().getColor().isWhite()) {
                 if(pawnMoves.getPossibleCheck().size() > 0) {
                     whitePoint += 100;
-                    blackPoint -= 100;
                 } else if(pawnMoves.getPossibleKick().size() > 0) {
-                    whitePoint += 20;
+                    whitePoint += 5;
                 }
 
                 whitePoint += calculatePawn(entry.getKey(), entry.getValue());
             } else {
                 if(pawnMoves.getPossibleCheck().size() > 0) {
                     blackPoint += 100;
-                    whitePoint -= 100;
                 } else if(pawnMoves.getPossibleKick().size() > 0) {
-                    blackPoint += 20;
+                    blackPoint += 5;
                 }
 
                 blackPoint += calculatePawn(entry.getKey(), entry.getValue());

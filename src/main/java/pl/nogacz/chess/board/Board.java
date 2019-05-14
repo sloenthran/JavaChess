@@ -117,7 +117,7 @@ public class Board {
         if(!gameLogic.isMovePossible()) {
             noMovePossibleInfo();
         }  else if(isKingChecked && possiblePawnIfKingIsChecked.size() == 0) {
-            if(gameLogic.isKingChecked(PawnColor.WHITE)) {
+            if(gameLogic.isKingChecked(PawnColor.BLACK)) {
                 statistics.addGameWin();
                 endGame("You win! Congratulations :)");
             } else {
