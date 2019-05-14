@@ -20,9 +20,25 @@ public class BoardPoint {
         int blackPoint = 0;
 
         for(Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
+            PawnMoves pawnMoves = new PawnMoves(entry.getValue(), entry.getKey());
+
             if(entry.getValue().getColor().isWhite()) {
+                if(pawnMoves.getPossibleCheck().size() > 0) {
+                    whitePoint += 100;
+                    blackPoint -= 100;
+                } else if(pawnMoves.getPossibleKick().size() > 0) {
+                    whitePoint += 20;
+                }
+
                 whitePoint += calculatePawn(entry.getKey(), entry.getValue());
             } else {
+                if(pawnMoves.getPossibleCheck().size() > 0) {
+                    blackPoint += 100;
+                    whitePoint -= 100;
+                } else if(pawnMoves.getPossibleKick().size() > 0) {
+                    blackPoint += 20;
+                }
+
                 blackPoint += calculatePawn(entry.getKey(), entry.getValue());
             }
         }
@@ -33,15 +49,7 @@ public class BoardPoint {
     private int calculatePawn(Coordinates coordinates, PawnClass pawn) {
         int point = 1;
 
-        PawnMoves pawnMoves = new PawnMoves(pawn, coordinates);
-
-        if(pawnMoves.getPossibleCheck().size() > 0) {
-            point += 100;
-        } else if(pawnMoves.getPossibleKick().size() > 0) {
-            point += 20;
-        }
-
-        if(pawn.getColor().isWhite() && pawn.getPawn() == Pawn.PAWN && coordinates.getY() > 4) {
+        if(pawn.getColor().isWhite()) {
             point++;
         } else if(pawn.getColor().isBlack() && pawn.getPawn() == Pawn.PAWN && coordinates.getY() < 4) {
             point++;

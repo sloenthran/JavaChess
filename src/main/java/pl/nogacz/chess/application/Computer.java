@@ -22,7 +22,6 @@ public class Computer {
 
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
-    private Set<Coordinates> possibleKickAndNotIsEnemyKickMe = new HashSet<>();
 
     private BoardPoint boardPoint = new BoardPoint();
 
@@ -82,7 +81,6 @@ public class Computer {
 
         possibleMoves.clear();
         possibleKick.clear();
-        possibleKickAndNotIsEnemyKickMe.clear();
 
         for (Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
             if (entry.getValue().getColor().isBlack()) {
@@ -107,28 +105,23 @@ public class Computer {
     }
 
     private Coordinates choosePawnEasy() {
-        Object[] object = null;
-
         if (possibleMoves.size() > 0) {
-            object = possibleMoves.toArray();
+            return selectRandom(possibleMoves);
         } else if (possibleKick.size() > 0) {
-            object = possibleKick.toArray();
-
+            return selectRandom(possibleKick);
         }
 
-        return (Coordinates) object[random.nextInt(object.length)];
+        return null;
     }
 
     private Coordinates choosePawnNormal() {
-        Object[] object = null;
-
         if (possibleKick.size() > 0) {
-            object = possibleKick.toArray();
+            return selectRandom(possibleKick);
         } else if (possibleMoves.size() > 0) {
-            object = possibleMoves.toArray();
+            return selectRandom(possibleMoves);
         }
 
-        return (Coordinates) object[random.nextInt(object.length)];
+        return null;
     }
 
     private Coordinates choosePawnHard() {
@@ -141,47 +134,30 @@ public class Computer {
         Set<Coordinates> cachePossiblePawn = new HashSet<>();
 
         for(Coordinates coordinates : cachePawn) {
-
             PawnMoves moves = new PawnMoves(Board.getPawn(coordinates), coordinates);
 
             Set<Coordinates> cacheMoves = new HashSet<>();
             cacheMoves.addAll(moves.getPossibleKick());
             cacheMoves.addAll(moves.getPossibleMoves());
 
-            for(Coordinates moveCoordinates : cacheMoves) {
-                PawnClass oldPawn = Board.addPawnWithoutDesign(moveCoordinates, Board.getPawn(coordinates));
+            int point = getMinNumber(cacheMoves, Board.getPawn(coordinates));
 
-                int point = boardPoint.calculateBoard();
-
-                if(point > minNumber) {
-                    minNumber = point;
-                }
-
-                Board.removePawnWithoutDesign(moveCoordinates);
-
-                if (oldPawn != null) {
-                    Board.addPawnWithoutDesign(moveCoordinates, oldPawn);
-                }
-            }
-
-            for(Coordinates moveCoordinates : cacheMoves) {
-                PawnClass oldPawn = Board.addPawnWithoutDesign(moveCoordinates, Board.getPawn(coordinates));
-
-                int point = boardPoint.calculateBoard();
-
-                if(point == minNumber) {
-                    cachePossiblePawn.add(coordinates);
-                }
-
-                Board.removePawnWithoutDesign(moveCoordinates);
-
-                if (oldPawn != null) {
-                    Board.addPawnWithoutDesign(moveCoordinates, oldPawn);
-                }
+            if(point > minNumber) {
+                minNumber = point;
             }
         }
 
-        return (Coordinates) cachePossiblePawn.toArray()[random.nextInt(cachePossiblePawn.size())];
+        for(Coordinates coordinates : cachePawn) {
+            PawnMoves moves = new PawnMoves(Board.getPawn(coordinates), coordinates);
+
+            Set<Coordinates> cacheMoves = new HashSet<>();
+            cacheMoves.addAll(moves.getPossibleKick());
+            cacheMoves.addAll(moves.getPossibleMoves());
+
+            cachePossiblePawn.addAll(getListWithOnlyMinNumber(cacheMoves, Board.getPawn(coordinates), minNumber));
+        }
+
+        return selectRandom(cachePossiblePawn);
     }
 
     public Coordinates chooseMove(Coordinates coordinates) {
@@ -197,11 +173,9 @@ public class Computer {
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
         if (moves.getPossibleMoves().size() > 0) {
-            Object[] object = moves.getPossibleMoves().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            return selectRandom(moves.getPossibleMoves());
         } else if (moves.getPossibleKick().size() > 0) {
-            Object[] object = moves.getPossibleKick().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            return selectRandom(moves.getPossibleKick());
         }
 
         return null;
@@ -212,11 +186,9 @@ public class Computer {
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
         if (moves.getPossibleKick().size() > 0) {
-            Object[] object = moves.getPossibleKick().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            return selectRandom(moves.getPossibleKick());
         } else if (moves.getPossibleMoves().size() > 0) {
-            Object[] object = moves.getPossibleMoves().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            return selectRandom(moves.getPossibleMoves());
         }
 
         return null;
@@ -226,51 +198,63 @@ public class Computer {
         PawnClass pawn = Board.getPawn(coordinates);
         PawnMoves moves = new PawnMoves(pawn, coordinates);
 
-        Object[] object = null;
+        Set<Coordinates> possibleMove = new HashSet<>();
+        possibleMove.addAll(moves.getPossibleMoves());
+        possibleMove.addAll(moves.getPossibleKick());
 
-        if(moves.getPossibleKick().size() > 0) {
-            moves.getPossibleKick().forEach(entry -> checkEnemyKickField(entry, pawn));
+        int minNumber = getMinNumber(possibleMove, pawn);
 
-            if(possibleKickAndNotIsEnemyKickMe.size() > 0) {
-                object = possibleKickAndNotIsEnemyKickMe.toArray();
-            } else {
-                object = moves.getPossibleKick().toArray();
+        Set<Coordinates> test = getListWithOnlyMinNumber(possibleMove, pawn, minNumber);
+
+        return selectRandom(test);
+    }
+
+    private int getMinNumber(Set<Coordinates> list, PawnClass actualPawn) {
+        int minNumber = -10000;
+
+        for(Coordinates coordinates : list) {
+            PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
+
+            int point = boardPoint.calculateBoard();
+
+            if(point > minNumber) {
+                minNumber = point;
             }
 
-            return (Coordinates) object[random.nextInt(object.length)];
-        } else if(moves.getPossibleMoves().size() > 0) {
-            object = moves.getPossibleMoves().toArray();
-            return (Coordinates) object[random.nextInt(object.length)];
+            Board.removePawnWithoutDesign(coordinates);
+
+            if (oldPawn != null) {
+                Board.addPawnWithoutDesign(coordinates, oldPawn);
+            }
         }
 
-        return null;
+        return minNumber;
+    }
+
+    private Set<Coordinates> getListWithOnlyMinNumber(Set<Coordinates> list, PawnClass actualPawn, int minNumber) {
+        Set<Coordinates> returnList = new HashSet<>();
+
+        for(Coordinates coordinates : list) {
+            PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
+
+            int point = boardPoint.calculateBoard();
+
+            if(point == minNumber) {
+                returnList.add(coordinates);
+            }
+
+            Board.removePawnWithoutDesign(coordinates);
+
+            if (oldPawn != null) {
+                Board.addPawnWithoutDesign(coordinates, oldPawn);
+            }
+        }
+
+        return returnList;
     }
 
     public Coordinates selectRandom(Set<Coordinates> list) {
         Object[] object = list.toArray();
         return (Coordinates) object[random.nextInt(object.length)];
-    }
-
-    private void checkEnemyKickField(Coordinates coordinates, PawnClass actualPawn) {
-        PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
-
-        Set<Coordinates> possibleEnemyKick = new HashSet<>();
-
-        for (Map.Entry<Coordinates, PawnClass> entry : Board.getBoard().entrySet()) {
-            if (!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && !entry.getValue().getPawn().isKing()) {
-                PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
-                possibleEnemyKick.addAll(moves.getPossibleKick());
-            }
-        }
-
-        Board.removePawnWithoutDesign(coordinates);
-
-        if(oldPawn != null) {
-            Board.addPawnWithoutDesign(coordinates, oldPawn);
-        }
-
-        if(!possibleEnemyKick.contains(coordinates)) {
-            possibleKickAndNotIsEnemyKickMe.add(coordinates);
-        }
     }
 }
