@@ -16,3 +16,5 @@ The game has a simple statistics system (winnings, losses, draws) and the abilit
 ```bash
 java -jar JavaChess.jar
 ```
+## Author
+Dawid "Sloenthran" Nogacz
