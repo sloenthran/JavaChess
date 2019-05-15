@@ -3,7 +3,6 @@ package pl.nogacz.chess.pawns.moves;
 import pl.nogacz.chess.board.Board;
 import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
-import pl.nogacz.chess.pawns.PawnColor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -76,14 +75,13 @@ public class Pawn implements PawnMovesInterface{
     public void checkField(Coordinates coordinates, PawnClass pawn) {
         if (Board.isFieldNotNull(coordinates)) {
             if (!Board.isThisSameColor(coordinates, pawn.getColor())) {
-                isPossibleKickPromote(coordinates, pawn);
-
                 PawnClass enemyPawn = Board.getPawn(coordinates);
 
                 if(enemyPawn.getPawn().isKing()) {
                     possibleCheck.add(coordinates);
                 } else {
                     possibleKick.add(coordinates);
+                    isPossibleKickPromote(coordinates, pawn);
                 }
             }
         }
