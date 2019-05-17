@@ -22,6 +22,7 @@ public class Computer {
 
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
+    private Set<Coordinates> possibleKickAndNotIsEnemyKickMe = new HashSet<>();
 
     private BoardPoint boardPoint = new BoardPoint();
 
@@ -81,6 +82,7 @@ public class Computer {
 
         possibleMoves.clear();
         possibleKick.clear();
+        possibleKickAndNotIsEnemyKickMe.clear();
 
         for (Map.Entry<Coordinates, PawnClass> entry : cacheBoard.entrySet()) {
             if (entry.getValue().getColor().isBlack()) {
@@ -216,9 +218,15 @@ public class Computer {
         possibleMove.addAll(moves.getPossibleMoves());
         possibleMove.addAll(moves.getPossibleKick());
 
-        Set<Coordinates> test = getListWithOnlyMinNumber(possibleMove, pawn);
+        Set<Coordinates> listWithOnlyMinNumber = getListWithOnlyMinNumber(possibleMove, pawn);
 
-        return selectRandom(test);
+        listWithOnlyMinNumber.forEach(entry -> checkEnemyKickField(entry, pawn));
+
+        if(possibleKickAndNotIsEnemyKickMe.size() > 0) {
+            return selectRandom(possibleKickAndNotIsEnemyKickMe);
+        } else {
+            return selectRandom(listWithOnlyMinNumber);
+        }
     }
 
     private int getMinNumber(Set<Coordinates> list, PawnClass actualPawn) {
@@ -264,6 +272,29 @@ public class Computer {
         }
 
         return returnList;
+    }
+
+    private void checkEnemyKickField(Coordinates coordinates, PawnClass actualPawn) {
+        PawnClass oldPawn = Board.addPawnWithoutDesign(coordinates, actualPawn);
+
+        Set<Coordinates> possibleEnemyKick = new HashSet<>();
+
+        for (Map.Entry<Coordinates, PawnClass> entry : Board.getBoard().entrySet()) {
+            if (!Board.isThisSameColor(entry.getKey(), actualPawn.getColor()) && !entry.getValue().getPawn().isKing()) {
+                PawnMoves moves = new PawnMoves(entry.getValue(), entry.getKey());
+                possibleEnemyKick.addAll(moves.getPossibleKick());
+            }
+        }
+
+        Board.removePawnWithoutDesign(coordinates);
+
+        if(oldPawn != null) {
+            Board.addPawnWithoutDesign(coordinates, oldPawn);
+        }
+
+        if(!possibleEnemyKick.contains(coordinates)) {
+            possibleKickAndNotIsEnemyKickMe.add(coordinates);
+        }
     }
 
     public Coordinates selectRandom(Set<Coordinates> list) {
