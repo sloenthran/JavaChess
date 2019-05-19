@@ -1,4 +1,5 @@
-# JavaChess [![Build Status](https://travis-ci.org/sloenthran/JavaChess.svg?branch=master)](https://travis-ci.org/sloenthran/JavaChess)
+# JavaChess [![Build Status](https://travis-ci.org/sloenthran/JavaChess.svg?branch=master)](https://travis-ci.org/sloenthran/JavaChess) [![codecov](https://codecov.io/gh/sloenthran/JavaChess/branch/master/graph/badge.svg)](https://codecov.io/gh/sloenthran/JavaChess)
+
 
 Chess game written in Java language.
 
