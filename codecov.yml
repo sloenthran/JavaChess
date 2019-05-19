@@ -1,0 +1,5 @@
+ignore:
+  - "src/main/java/pl/nogacz/chess/application"
+  - "src/main/java/pl/nogacz/chess/Chess.java"
+  - "src/main/java/pl/nogacz/chess/pawns/PawnPromote.java"
+  - "src/main/java/pl/nogacz/chess/board/Board.java"
