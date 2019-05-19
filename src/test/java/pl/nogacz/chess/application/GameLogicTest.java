@@ -51,20 +51,20 @@ public class GameLogicTest {
         board.put(new Coordinates(0, 0), pawnBlack);
         board.put(new Coordinates(0, 6), pawnWhite);
         board.put(new Coordinates(0, 1), pawnBlack);
-        board.put(new Coordinates(0, 6), pawnWhite);
+        board.put(new Coordinates(1, 6), pawnWhite);
 
         //When
         PowerMockito.when(Board.getBoard()).thenReturn(board);
         PowerMockito.when(Board.getPawn(new Coordinates(0,0))).thenReturn(pawnBlack);
         PowerMockito.when(Board.getPawn(new Coordinates(0,6))).thenReturn(pawnWhite);
         PowerMockito.when(Board.getPawn(new Coordinates(0,1))).thenReturn(pawnBlack);
-        PowerMockito.when(Board.getPawn(new Coordinates(0,6))).thenReturn(pawnWhite);
+        PowerMockito.when(Board.getPawn(new Coordinates(1,6))).thenReturn(pawnWhite);
 
         gameLogic.prepareData();
         boolean isMovePossible = gameLogic.isMovePossible();
 
         //Then
-        Assert.assertEquals(true, isMovePossible);
+        Assert.assertTrue(isMovePossible);
     }
 
     @PrepareForTest({Board.class})
