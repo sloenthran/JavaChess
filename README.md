@@ -20,6 +20,7 @@ java -jar JavaChess.jar
 ## Controls
 
 Mouse
+
 R and N keys - restart game
 
 ## Author
