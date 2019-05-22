@@ -17,5 +17,10 @@ The game has a simple statistics system (winnings, losses, draws) and the abilit
 ```bash
 java -jar JavaChess.jar
 ```
+## Controls
+
+Mouse
+R and N keys - restart game
+
 ## Author
 Dawid "Sloenthran" Nogacz
