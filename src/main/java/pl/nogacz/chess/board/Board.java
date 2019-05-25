@@ -112,6 +112,10 @@ public class Board {
 
         Coordinates eventCoordinates = new Coordinates((int) ((event.getX() - 37) / 84), (int) ((event.getY() - 37) / 84));
 
+        if(!eventCoordinates.isValid()) {
+            return;
+        }
+
         gameLogic.prepareData();
 
         if(!gameLogic.isMovePossible()) {
@@ -124,7 +128,7 @@ public class Board {
                 statistics.addGameLoss();
                 endGame("You loss. Maybe you try again?");
             }
-        } else if(eventCoordinates.isValid()) {
+        } else {
             if(isSelected) {
                 if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;
