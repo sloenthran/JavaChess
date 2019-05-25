@@ -47,7 +47,7 @@ public class BoardPoint {
     private int calculatePawn(Coordinates coordinates, PawnClass pawn) {
         int point = 1;
 
-        if(pawn.getColor().isWhite()) {
+        if(pawn.getColor().isWhite() && pawn.getPawn() == Pawn.PAWN && coordinates.getY() > 4) {
             point++;
         } else if(pawn.getColor().isBlack() && pawn.getPawn() == Pawn.PAWN && coordinates.getY() < 4) {
             point++;
