@@ -125,7 +125,6 @@ public class Board {
                 endGame("You loss. Maybe you try again?");
             }
         } else if(eventCoordinates.isValid()) {
-
             if(isSelected) {
                 if(eventCoordinates.equals(selectedCoordinates)) {
                     selectedCoordinates = null;
@@ -149,6 +148,15 @@ public class Board {
                     checkPromote(eventCoordinates, 0);
 
                     computerMove();
+                } else if(isFieldNotNull(eventCoordinates) && Board.getPawn(eventCoordinates).getColor().isWhite() && isPossibleSelect(eventCoordinates, PawnColor.WHITE)) {
+                    possibleMovePromote.clear();
+                    possibleKickPromote.clear();
+
+                    unLightSelect(selectedCoordinates);
+
+                    selectedCoordinates = eventCoordinates;
+                    isSelected = true;
+                    lightSelect(eventCoordinates);
                 }
             } else {
                 if(isFieldNotNull(eventCoordinates)) {
