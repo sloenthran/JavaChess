@@ -53,7 +53,7 @@ public class SaveGame {
         loadChessNotation();
     }
 
-    private void loadBoard() {
+    private void loadChessNotation() {
         try {
             Object readObject = readObject(new File("gameCache/chessNotation.dat"));
 
@@ -67,7 +67,7 @@ public class SaveGame {
         }
     }
 
-    private void loadChessNotation() {
+    private void loadBoard() {
         try {
             Object readObject = readObject(new File("gameCache/board.dat"));
 
