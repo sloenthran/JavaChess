@@ -29,5 +29,9 @@ Dawid "Sloenthran" Nogacz
 
 ## Running
 
+```
 gradle build
+
 gradle run
+
+```
