@@ -1,5 +1,15 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.9'
+
+    // https://imperceptiblethoughts.com/shadow/getting-started/#default-java-groovy-tasks
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+
+    id 'jacoco'
+}
+
+mainClassName = 'pl.nogacz.chess.Chess'
+
 
 group = 'pl.nogacz'
 version = '1.0-BETA'
@@ -30,6 +40,11 @@ jar {
                 'Main-Class': 'pl.nogacz.chess.Chess',
         )
     }
+}
+
+javafx {
+    version = "15.0.1"
+    modules = [ 'javafx.controls' ]
 }
 
 check.dependsOn jacocoTestReport
