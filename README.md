@@ -25,3 +25,9 @@ R and N keys - restart game
 
 ## Author
 Dawid "Sloenthran" Nogacz
+
+
+## Running
+
+gradle build
+gradle run
