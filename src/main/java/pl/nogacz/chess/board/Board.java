@@ -370,6 +370,9 @@ public class Board {
 
     private void movePawn(Coordinates oldCoordinates, Coordinates newCoordinates) {
         PawnClass pawn = getPawn(oldCoordinates);
+        PawnClass kicked=getPawn(newCoordinates);
+        if(kicked!=null)
+            ChessNotation.addKicked(kicked);
         Design.removePawn(oldCoordinates);
         Design.removePawn(newCoordinates);
         Design.addPawn(newCoordinates, pawn);
@@ -440,5 +443,19 @@ public class Board {
 
     private void unLightMove(Coordinates coordinates) {
         Design.removePawn(coordinates);
+    }
+
+    public static void undo(Coordinates oldCoordinates, Coordinates newCoordinates) {
+        PawnClass pawn = getPawn(newCoordinates);//oldCoordinates reverse|new Coordinate null x and y is false?
+        Design.removePawn(newCoordinates);
+        Design.addPawn(oldCoordinates, pawn);
+
+        board.remove(newCoordinates);
+        board.put(oldCoordinates, pawn);
+    }
+    
+    public static void resurrection(PawnClass pawn, Coordinates coordinate){
+        Design.addPawn(coordinate, pawn);
+        board.put(coordinate, pawn);
     }
 }

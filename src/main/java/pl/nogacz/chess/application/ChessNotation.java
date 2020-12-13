@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class ChessNotation implements Serializable {
     private static List<String> movesList = new ArrayList<>();
+    private static List<PawnClass> kicked= new ArrayList<PawnClass>();
 
     private String playerMove = "";
     private String computerMove = "";
@@ -33,6 +34,16 @@ public class ChessNotation implements Serializable {
         }
     }
 
+    public static String removeMovement(){
+        String lastMove="";
+        if(movesList.size()>0){
+        lastMove=movesList.get(movesList.size()-1);
+        movesList.remove(movesList.size()-1);
+        updateTextArea();
+        }
+        return lastMove;
+    }
+    
     public void saveRound() {
         movesList.add(playerMove + " " + computerMove);
 
@@ -101,5 +112,14 @@ public class ChessNotation implements Serializable {
         } else {
             return "";
         }
+    }
+    public static void addKicked(PawnClass pawn){
+        kicked.add(pawn);
+    }
+    public static PawnClass removeKicked(){
+        int index=kicked.size()-1;
+        PawnClass ret=kicked.get(index);
+        kicked.remove(index);
+        return ret;
     }
 }
