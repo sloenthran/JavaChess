@@ -36,7 +36,7 @@ public class Undo{
         Board.undo(oldCoordinate, newCoordinate);
         if(playerKicked){
             PawnClass pawn=ChessNotation.removeKicked();
-            Board.resurrection(pawn, oldCoordinate);
+            Board.resurrection(pawn, newCoordinate);
         }
 
         String player=lastMove.substring(0,lastMove.indexOf(" "));
@@ -53,7 +53,7 @@ public class Undo{
         Board.undo(oldCoordinate, newCoordinate);
         if(computerKicked){
             PawnClass pawn=ChessNotation.removeKicked();
-            Board.resurrection(pawn, oldCoordinate);
+            Board.resurrection(pawn, newCoordinate);
         }
 
 
