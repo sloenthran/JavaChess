@@ -446,7 +446,7 @@ public class Board {
     }
 
     public static void undo(Coordinates oldCoordinates, Coordinates newCoordinates) {
-        PawnClass pawn = getPawn(newCoordinates);//oldCoordinates reverse|new Coordinate null x and y is false?
+        PawnClass pawn = getPawn(newCoordinates);
         Design.removePawn(newCoordinates);
         Design.addPawn(oldCoordinates, pawn);
 
