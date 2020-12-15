@@ -96,6 +96,14 @@ public class Design {
         statistics.setPrefSize(100, 20);
         statistics.setOnMouseClicked(event -> new Statistics().printInfo());
 
+        Button save = new Button("Save");
+        save.setPrefSize(100, 20);
+        save.setOnMouseClicked(event -> new SaveGame().save());
+
+        Button load = new Button("Load");
+        load.setPrefSize(100, 20);
+        load.setOnMouseClicked(event -> new SaveGame().load());
+
         Button author = new Button("Author");
         author.setPrefSize(100, 20);
         author.setOnMouseClicked(event -> new AuthorInfo());
@@ -104,7 +112,7 @@ public class Design {
         exitGame.setPrefSize(100, 20);
         exitGame.setOnMouseClicked(event -> System.exit(0));
 
-        hBox.getChildren().addAll(newGame, difficulty, statistics, author, exitGame);
+        hBox.getChildren().addAll(newGame, difficulty, statistics, save, load, author, exitGame);
     }
 
     public static void addPawn(Coordinates coordinates, PawnClass pawn) {

@@ -10,19 +10,54 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+
+
+
+
 /**
  * @author Dawid Nogacz on 10.05.2019
  */
 public class SaveGame {
     public boolean isSave() {
-        File tempFile = new File("gameCache/board.dat");
+        File tempFile = new File("saveFile/board.dat");
         return tempFile.exists();
     }
 
+    public void makeDir() {
+        File directory = new File(String.valueOf("saveFile"));
+        if(!directory.exists())
+            directory.mkdir();
+
+        File directory2 = new File(String.valueOf("gameCache"));
+        if(!directory2.exists())
+            directory2.mkdir();
+    }
+
+
     public void save() {
+        makeDir();
         saveBoard();
         saveChessNotation();
     }
+
+    public void save2() throws IOException {
+        
+        copyFile(new File("gameCache/board.dat"),new File("saveFile/board.dat"));
+        copyFile(new File("gameCache/chessNotation.dat"),new File("saveFile/chessNotation.dat"));
+
+    }
+
+    private static void copyFile(File sourceFile, File destinationFile) throws IOException {
+    try (InputStream in = new FileInputStream(sourceFile); 
+      OutputStream out = new FileOutputStream(destinationFile)) {
+        byte[] buf = new byte[1024];
+        int length;
+        while ((length = in.read(buf)) > 0) {
+            out.write(buf, 0, length);
+        }
+    }
+    
+}
 
     private void saveBoard() {
         try {
@@ -55,7 +90,7 @@ public class SaveGame {
 
     private void loadChessNotation() {
         try {
-            Object readObject = readObject(new File("gameCache/chessNotation.dat"));
+            Object readObject = readObject(new File("saveFile/chessNotation.dat"));
 
             if(!(readObject instanceof List)) throw new Exception("Data is not a List");
 
@@ -69,7 +104,7 @@ public class SaveGame {
 
     private void loadBoard() {
         try {
-            Object readObject = readObject(new File("gameCache/board.dat"));
+            Object readObject = readObject(new File("saveFile/board.dat"));
 
             if(!(readObject instanceof HashMap)) throw new Exception("Data is not a HashMap");
 
@@ -103,3 +138,5 @@ public class SaveGame {
         tempFile.delete();
     }
 }
+
+
