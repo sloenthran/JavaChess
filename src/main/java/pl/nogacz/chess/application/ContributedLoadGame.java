@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -101,14 +102,17 @@ public class ContributedLoadGame {
 
     private void loadChessNotation(File dir) {
         String filePath = dir.getAbsolutePath();
-        filePath = filePath + "/chessNotation.json";
-        String json = null;
+        filePath = filePath + "/chessNotation.txt";
+        Scanner sc = null;
         try {
-            json = new Scanner(new File(filePath)).useDelimiter("\\Z").next();
+            sc = new Scanner(new FileInputStream(filePath)).useDelimiter("\n");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        List<String> cacheNotation= new Gson().fromJson(json, List.class);
+        List<String> cacheNotation= new ArrayList<>();
+        while(sc.hasNext()){
+            cacheNotation.add(sc.next());
+        }
         ChessNotation.setMovesList(cacheNotation);
     }
 
