@@ -98,6 +98,19 @@ public class Board {
         }
     }
 
+    public static void redesignBoard(){
+        for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
+            Design.addPawn(entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static void clearBoard(){
+        for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
+            Design.removePawn(entry.getKey());
+        }
+    }
+
+
     public void readMouseEvent(MouseEvent event) {
         if(isComputerRound || isGameEnd) {
             return;

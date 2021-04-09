@@ -9,6 +9,7 @@ import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
+import sun.security.krb5.internal.crypto.Des;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +37,7 @@ public class ContributedLoadGame {
     }
 
     private void loadBoard(File dir){
-
+        Board.clearBoard();
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/board.txt";
         Scanner sc = null;
@@ -96,8 +97,9 @@ public class ContributedLoadGame {
 
         }
 
-        Board.setBoard(cacheMap);
 
+        Board.setBoard(cacheMap);
+        Board.redesignBoard();
     }
 
     private void loadChessNotation(File dir) {
@@ -119,7 +121,7 @@ public class ContributedLoadGame {
     private void loadComputer(File dir) {
         try {
             String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/computer.json";
+            filePath = filePath + "/computer.txt";
             int skill = Integer.parseInt(new Scanner(new File(filePath)).next());
             Computer.setSkill(skill);
         } catch (IOException e) {
@@ -131,7 +133,7 @@ public class ContributedLoadGame {
 
         try {
             String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/statistics.json";
+            filePath = filePath + "/statistics.txt";
             Scanner s = new Scanner(new File(filePath)).useDelimiter("\n");
             String gamewin = s.next();
             gamewin = gamewin.substring(gamewin.indexOf(':')+1);
