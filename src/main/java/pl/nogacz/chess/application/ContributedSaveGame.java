@@ -6,10 +6,13 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import pl.nogacz.chess.application.menu.Statistics;
 import pl.nogacz.chess.board.Board;
+import pl.nogacz.chess.board.Coordinates;
+import pl.nogacz.chess.pawns.PawnClass;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -24,62 +27,66 @@ public class ContributedSaveGame {
         if(selectedDir != null) {
             saveBoard(selectedDir);
             saveChessNotation(selectedDir);
+            saveComputer(selectedDir);
+            saveStatistics(selectedDir);
         }
     }
     private void saveBoard(File dir){
-        Gson gsonObj = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
-        String json = gsonObj.toJson(Board.getBoard());
+        String filePath = dir.getAbsolutePath();
+        filePath = filePath + "/board.txt";
         try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/board.json";
-            FileWriter writer = new FileWriter(filePath);
-            writer.write(json);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
+            PrintWriter out = new PrintWriter(filePath);
+            HashMap<Coordinates, PawnClass> board = Board.getBoard();
+            for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
+                String coordinates = entry.getKey().getX() + "," +  entry.getKey().getY() + ",";
+                String man = board.get(entry.getKey()).getColor() + "," + board.get(entry.getKey()).getPawn();
+                String line = coordinates + man;
+                out.println(line);
+            }
+            out.close();
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     private void saveChessNotation(File dir) {
-        Gson gsonObj = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().create();
-        String json = gsonObj.toJson(ChessNotation.getMovesList());
+        String filePath = dir.getAbsolutePath();
+        filePath = filePath + "/chessNotation.txt";
         try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/chessNotation.json";
-            FileWriter writer = new FileWriter(filePath);
-            writer.write(json);
-            writer.close();
+            PrintWriter out = new PrintWriter(filePath);
+            ArrayList<String> list = (ArrayList<String>) ChessNotation.getMovesList();
+            for(int i=0; i<list.size();i++){
+                out.println(list.get(i));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void saveComputer(File dir) {
-        Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
-        String json = gsonObj.toJson(Computer.getSkill());
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/computer.json";
             FileWriter writer = new FileWriter(filePath);
-            writer.write(json);
+            writer.write(Computer.getSkill());
             writer.flush();
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     private void saveStatistics(File dir) {
         Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
-        String stats = "Game win: " + Statistics.getGameWin() +
-                        "\nGame loss: " + Statistics.getGameLoss() +
-                        "\nGame draw: " + Statistics.getGameDraw();
-        String json = gsonObj.toJson(stats);
+        String stats = "Game win:" + Statistics.getGameWin() + "\n" +
+                        "Game loss:" + Statistics.getGameLoss() + "\n"+
+                        "Game draw:" + Statistics.getGameDraw();
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/statistics.json";
             FileWriter writer = new FileWriter(filePath);
-            writer.write(json);
+            writer.write(stats);
             writer.flush();
             writer.close();
         } catch (IOException e) {

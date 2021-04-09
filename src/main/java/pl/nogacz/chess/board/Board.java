@@ -237,7 +237,6 @@ public class Board {
                 isComputerRound = false;
                 selectedCoordinates = null;
                 chessNotation.saveRound();
-                cSaveGame.save();
                 //saveGame.save();
             }
         });

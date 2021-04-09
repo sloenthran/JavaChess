@@ -28,6 +28,8 @@ public class ContributedLoadGame {
         if(selectedDir != null) {
             loadBoard(selectedDir);
             loadChessNotation(selectedDir);
+            loadComputer(selectedDir);
+            loadStatistics(selectedDir);
         }
     }
 
@@ -75,10 +77,17 @@ public class ContributedLoadGame {
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/statistics.json";
-            Scanner s = new Scanner(new File(filePath));
-            Statistics.setGameWin(Integer.parseInt(s.next()));
-            Statistics.setGameLoss(Integer.parseInt(s.next()));
-            Statistics.setGameDraw(Integer.parseInt(s.next()));
+            Scanner s = new Scanner(new File(filePath)).useDelimiter("\n");
+            String gamewin = s.next();
+            gamewin = gamewin.substring(gamewin.indexOf(':')+1);
+            Statistics.setGameWin(Integer.parseInt(gamewin));
+            String gameloss = s.next();
+            gameloss = gameloss.substring(gameloss.indexOf(':')+1);
+            Statistics.setGameLoss(Integer.parseInt(gameloss));
+            String gamedraw = s.next();
+            gamedraw = gamedraw.substring(gamedraw.indexOf(':')+1);
+            Statistics.setGameDraw(Integer.parseInt(gamedraw));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
