@@ -181,7 +181,7 @@ public class Board {
     }
 
     public static void setComputerSkill(int skill) {
-        computer.setSkill(skill);
+        Computer.setSkill(skill);
     }
 
     private void computerMove() {

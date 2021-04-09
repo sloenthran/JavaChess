@@ -68,9 +68,9 @@ public class ContributedSaveGame {
     private void saveComputer(File dir) {
         try {
             String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/computer.json";
-            FileWriter writer = new FileWriter(filePath);
-            writer.write(Computer.getSkill());
+            filePath = filePath + "/computer.txt";
+            PrintWriter writer = new PrintWriter(filePath);
+            writer.println(Computer.getSkill());
             writer.flush();
             writer.close();
         } catch (IOException e) {
@@ -79,14 +79,13 @@ public class ContributedSaveGame {
     }
 
     private void saveStatistics(File dir) {
-        Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
         String stats = "Game win:" + Statistics.getGameWin() + "\n" +
                         "Game loss:" + Statistics.getGameLoss() + "\n"+
                         "Game draw:" + Statistics.getGameDraw();
         try {
             String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/statistics.json";
-            FileWriter writer = new FileWriter(filePath);
+            filePath = filePath + "/statistics.txt";
+            PrintWriter writer = new PrintWriter(filePath);
             writer.write(stats);
             writer.flush();
             writer.close();
