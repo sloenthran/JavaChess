@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import pl.nogacz.chess.application.menu.Statistics;
 import pl.nogacz.chess.board.Board;
 
 import java.io.File;
@@ -54,12 +55,29 @@ public class ContributedSaveGame {
         }
     }
 
-    public void saveComputer(File dir) {
+    private void saveComputer(File dir) {
         Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
         String json = gsonObj.toJson(Computer.getSkill());
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/computer.json";
+            FileWriter writer = new FileWriter(filePath);
+            writer.write(json);
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void saveStatistics(File dir) {
+        Gson gsonObj = new GsonBuilder().setPrettyPrinting().create();
+        String stats = "Game win: " + Statistics.getGameWin() +
+                        "\nGame loss: " + Statistics.getGameLoss() +
+                        "\nGame draw: " + Statistics.getGameDraw();
+        String json = gsonObj.toJson(stats);
+        try {
+            String filePath = dir.getAbsolutePath();
+            filePath = filePath + "/statistics.json";
             FileWriter writer = new FileWriter(filePath);
             writer.write(json);
             writer.flush();

@@ -13,16 +13,11 @@ import java.util.zip.GZIPOutputStream;
  * @author Dawid Nogacz on 12.05.2019
  */
 public class Statistics implements Serializable {
-    private int gameWin = 0;
-    private int gameLoss = 0;
-    private int gameDraw = 0;
+    private static int gameWin = 0;
+    private static int gameLoss = 0;
+    private static int gameDraw = 0;
 
     public Statistics() {
-        if(isExists()) {
-            load();
-        } else {
-            save();
-        }
     }
 
     public void printInfo() {
@@ -40,80 +35,46 @@ public class Statistics implements Serializable {
         Optional<ButtonType> result = alert.showAndWait();
 
         if (result.get() == reset){
-            remove();
-
             gameWin = 0;
             gameLoss = 0;
             gameDraw = 0;
-
-            save();
-
             printInfo();
         }
     }
 
-    private boolean isExists() {
-        File tempFile = new File("gameCache/statistics.dat");
-        return tempFile.exists();
+    public static int getGameWin() {
+        return gameWin;
     }
 
-    private void save() {
-        try {
-            ArrayList<Integer> stats = new ArrayList<>();
-            stats.add(gameWin);
-            stats.add(gameLoss);
-            stats.add(gameDraw);
-
-            File file = new File("gameCache/statistics.dat");
-            ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-            output.writeObject(stats);
-            output.flush();
-            output.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public static void setGameWin(int gameWin) {
+        Statistics.gameWin = gameWin;
     }
 
-    private void load() {
-        try {
-            File file = new File("gameCache/statistics.dat");
-            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
-
-            Object readObject = input.readObject();
-            input.close();
-
-            if(!(readObject instanceof ArrayList)) throw new Exception("Data is not a ArrayList");
-
-            ArrayList<Integer> cacheMap = (ArrayList<Integer>) readObject;
-
-            gameWin = cacheMap.get(0);
-            gameLoss = cacheMap.get(1);
-            gameDraw = cacheMap.get(2);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+    public static int getGameLoss() {
+        return gameLoss;
     }
 
-    private void remove() {
-        File tempFile = new File("gameCache/statistics.dat");
-        tempFile.delete();
+    public static void setGameLoss(int gameLoss) {
+        Statistics.gameLoss = gameLoss;
+    }
+
+    public static int getGameDraw() {
+        return gameDraw;
+    }
+
+    public static void setGameDraw(int gameDraw) {
+        Statistics.gameDraw = gameDraw;
     }
 
     public void addGameWin() {
         gameWin++;
-        remove();
-        save();
     }
 
     public void addGameLoss() {
         gameLoss++;
-        remove();
-        save();
     }
 
     public void addGameDraw() {
         gameDraw++;
-        remove();
-        save();
     }
 }

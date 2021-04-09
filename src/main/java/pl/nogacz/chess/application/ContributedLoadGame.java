@@ -1,14 +1,17 @@
 package pl.nogacz.chess.application;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import pl.nogacz.chess.application.menu.Statistics;
 import pl.nogacz.chess.board.Board;
 import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -60,8 +63,22 @@ public class ContributedLoadGame {
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/computer.json";
-            int skill = Integer.parseInt(new Scanner(new File(filePath)).useDelimiter("\\Z").next());
+            int skill = Integer.parseInt(new Scanner(new File(filePath)).next());
             Computer.setSkill(skill);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadStatistics(File dir) {
+
+        try {
+            String filePath = dir.getAbsolutePath();
+            filePath = filePath + "/statistics.json";
+            Scanner s = new Scanner(new File(filePath));
+            Statistics.setGameWin(Integer.parseInt(s.next()));
+            Statistics.setGameLoss(Integer.parseInt(s.next()));
+            Statistics.setGameDraw(Integer.parseInt(s.next()));
         } catch (IOException e) {
             e.printStackTrace();
         }
