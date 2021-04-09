@@ -56,9 +56,10 @@ public class ContributedSaveGame {
         try {
             PrintWriter out = new PrintWriter(filePath);
             ArrayList<String> list = (ArrayList<String>) ChessNotation.getMovesList();
-            for(int i=0; i<list.size();i++){
-                out.println(list.get(i));
-            }
+           for(int i =0; i<list.size();i++){
+               out.println(list.get(i));
+           }
+            out.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
