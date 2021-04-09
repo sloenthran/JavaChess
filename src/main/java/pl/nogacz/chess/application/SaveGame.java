@@ -14,6 +14,7 @@ import java.util.zip.GZIPOutputStream;
  * @author Dawid Nogacz on 10.05.2019
  */
 public class SaveGame {
+
     public boolean isSave() {
         File tempFile = new File("gameCache/board.dat");
         return tempFile.exists();

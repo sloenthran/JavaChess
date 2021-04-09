@@ -25,6 +25,7 @@ import java.util.Set;
  */
 public class Board {
     private SaveGame saveGame = new SaveGame();
+    private ContributedSaveGame cSaveGame = new ContributedSaveGame();
     private ChessNotation chessNotation = new ChessNotation();
     private Statistics statistics = new Statistics();
 
@@ -49,15 +50,7 @@ public class Board {
     private Set<Coordinates> possiblePawnIfKingIsChecked = new HashSet<>();
 
     public Board() {
-        if(saveGame.isSave()) {
-            saveGame.load();
-
-            for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
-                Design.addPawn(entry.getKey(), entry.getValue());
-            }
-        } else {
-            addStartPawn();
-        }
+        addStartPawn();
     }
 
     public static HashMap<Coordinates, PawnClass> getBoard() {
@@ -244,7 +237,8 @@ public class Board {
                 isComputerRound = false;
                 selectedCoordinates = null;
                 chessNotation.saveRound();
-                saveGame.save();
+                cSaveGame.save();
+                //saveGame.save();
             }
         });
 

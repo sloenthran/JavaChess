@@ -1,5 +1,7 @@
 package pl.nogacz.chess.application;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import pl.nogacz.chess.board.Board;
 import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.Pawn;
@@ -18,7 +20,7 @@ import java.util.zip.GZIPOutputStream;
 public class Computer {
     private HashMap<Coordinates, PawnClass> cacheBoard;
     private Random random = new Random();
-    private int skill = 0; // 0 - Normal || 1 - Easy || 2 - Hard
+    private static int skill = 0; // 0 - Normal || 1 - Easy || 2 - Hard
 
     private Set<Coordinates> possibleKick = new HashSet<>();
     private Set<Coordinates> possibleMoves = new HashSet<>();
@@ -27,54 +29,16 @@ public class Computer {
     private BoardPoint boardPoint = new BoardPoint();
 
     public Computer() {
-        if (isExists()) {
-            load();
-        } else {
-            save();
-        }
+
     }
 
-    private boolean isExists() {
-        File tempFile = new File("gameCache/computer.dat");
-        return tempFile.exists();
+    public static int getSkill(){
+        return skill;
     }
 
-    private void save() {
-        try {
-            File file = new File("gameCache/computer.dat");
-            ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-            output.writeObject(skill);
-            output.flush();
-            output.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
-    private void load() {
-        try {
-            File file = new File("gameCache/computer.dat");
-            ObjectInputStream input = new ObjectInputStream(new GZIPInputStream(new FileInputStream(file)));
-
-            Object readObject = input.readObject();
-            input.close();
-
-            skill = (int) readObject;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void remove() {
-        File tempFile = new File("gameCache/computer.dat");
-        tempFile.delete();
-    }
-
-    public void setSkill(int skill) {
-        this.skill = skill;
-
-        remove();
-        save();
+    public static void setSkill(int s) {
+        skill = s;
     }
 
     public void getGameData() {

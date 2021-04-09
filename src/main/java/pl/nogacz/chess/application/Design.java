@@ -104,7 +104,15 @@ public class Design {
         exitGame.setPrefSize(100, 20);
         exitGame.setOnMouseClicked(event -> System.exit(0));
 
-        hBox.getChildren().addAll(newGame, difficulty, statistics, author, exitGame);
+        Button saveGame = new Button("Save game");
+        saveGame.setPrefSize(100, 20);
+        saveGame.setOnMouseClicked(event -> new ContributedSaveGame().save());
+
+        Button loadGame = new Button("Load game");
+        loadGame.setPrefSize(100, 20);
+        loadGame.setOnMouseClicked(event -> new ContributedLoadGame().load());
+
+        hBox.getChildren().addAll(newGame, difficulty, statistics, author, exitGame,saveGame,loadGame);
     }
 
     public static void addPawn(Coordinates coordinates, PawnClass pawn) {
