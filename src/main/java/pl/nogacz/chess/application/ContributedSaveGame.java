@@ -1,7 +1,5 @@
 package pl.nogacz.chess.application;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import pl.nogacz.chess.application.menu.Statistics;
@@ -13,7 +11,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
+
 
 
 public class ContributedSaveGame {
