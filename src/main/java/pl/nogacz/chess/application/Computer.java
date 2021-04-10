@@ -1,18 +1,15 @@
 package pl.nogacz.chess.application;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import pl.nogacz.chess.board.Board;
 import pl.nogacz.chess.board.Coordinates;
-import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
-import pl.nogacz.chess.pawns.PawnColor;
+
 import pl.nogacz.chess.pawns.moves.PawnMoves;
 
-import java.io.*;
 import java.util.*;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+
+
 
 /**
  * @author Dawid Nogacz on 01.05.2019

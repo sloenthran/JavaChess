@@ -1,6 +1,6 @@
 package pl.nogacz.chess.application;
 
-import com.google.gson.Gson;
+
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import pl.nogacz.chess.application.menu.Statistics;

@@ -22,10 +22,15 @@ public class SaveGame {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle("Select location");
         this.selectedDir = dirChooser.showDialog(new Stage());
-        saveToDirectory(selectedDir);
+        try {
+            saveToDirectory(selectedDir);
+        } catch (FileNotFoundException exception) {
+            exception.printStackTrace();
+        }
     }
 
     public void saveToDirectory(File dir) throws FileNotFoundException {
+        this.selectedDir = dir;
         if(dir != null) {
             saveBoard();
             saveChessNotation();
