@@ -106,11 +106,11 @@ public class Design {
 
         Button saveGame = new Button("Save game");
         saveGame.setPrefSize(100, 20);
-        saveGame.setOnMouseClicked(event -> new ContributedSaveGame().save());
+        saveGame.setOnMouseClicked(event -> new SaveGame().save());
 
         Button loadGame = new Button("Load game");
         loadGame.setPrefSize(100, 20);
-        loadGame.setOnMouseClicked(event -> new ContributedLoadGame().load());
+        loadGame.setOnMouseClicked(event -> new LoadGame().load());
 
         hBox.getChildren().addAll(newGame, difficulty, statistics, author, exitGame,saveGame,loadGame);
     }

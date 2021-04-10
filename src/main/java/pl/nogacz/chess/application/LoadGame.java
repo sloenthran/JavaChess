@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.zip.CRC32;
 
-public class ContributedLoadGame {
+public class LoadGame {
 
     public void load(){
         DirectoryChooser dirChooser = new DirectoryChooser();

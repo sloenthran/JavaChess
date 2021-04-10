@@ -24,8 +24,7 @@ import java.util.Set;
  * @author Dawid Nogacz on 01.05.2019
  */
 public class Board {
-    private SaveGame saveGame = new SaveGame();
-    private ContributedSaveGame cSaveGame = new ContributedSaveGame();
+    private SaveGame cSaveGame = new SaveGame();
     private ChessNotation chessNotation = new ChessNotation();
     private Statistics statistics = new Statistics();
 

@@ -3,7 +3,6 @@ package pl.nogacz.chess.application.menu;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import pl.nogacz.chess.Chess;
-import pl.nogacz.chess.application.SaveGame;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.Optional;
  * @author Dawid Nogacz on 07.05.2019
  */
 public class EndGame {
-    private SaveGame saveGame = new SaveGame();
     private String message;
 
     public EndGame(String message) {
@@ -35,13 +33,11 @@ public class EndGame {
         if (result.get() == newGameButton){
             newGame();
         } else {
-            saveGame.remove();
             System.exit(0);
         }
     }
 
     public void newGame() {
-        //saveGame.remove();
         restartApplication();
     }
 
