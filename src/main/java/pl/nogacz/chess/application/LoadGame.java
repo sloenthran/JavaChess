@@ -23,21 +23,33 @@ import java.util.zip.CRC32;
 
 public class LoadGame {
 
+    private File dir;
     public void load(){
         DirectoryChooser dirChooser = new DirectoryChooser();
 
         dirChooser.setTitle("Choose location");
 
         File selectedDir = dirChooser.showDialog(new Stage());
-        if(selectedDir != null) {
-            loadBoard(selectedDir);
-            loadChessNotation(selectedDir);
-            loadComputer(selectedDir);
-            loadStatistics(selectedDir);
+        this.dir = selectedDir;
+        try {
+            loadFromDirectory(dir);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void loadBoard(File dir){
+    public void loadFromDirectory(File selectedDir) throws Exception {
+        this.dir = selectedDir;
+        if(selectedDir != null) {
+            loadBoard();
+            loadChessNotation();
+            loadComputer();
+            loadStatistics();
+        }
+
+    }
+
+    private void loadBoard() throws Exception {
         Board.clearBoard();
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/board.txt";
@@ -106,12 +118,7 @@ public class LoadGame {
             }else{
                 boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
-                    try {
-                        throw new Exception("Board file is not trusted.");
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.exit(0);
-                    }
+                    throw new Exception("Board file is not trusted.");
                 }
             }
 
@@ -122,7 +129,7 @@ public class LoadGame {
         Board.redesignBoard();
     }
 
-    private void loadChessNotation(File dir) {
+    private void loadChessNotation() throws Exception {
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/chessNotation.txt";
         Scanner sc = null;
@@ -142,19 +149,14 @@ public class LoadGame {
             else{
                 boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
-                    try {
-                        throw new Exception("Chess notation file is not trusted.");
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        System.exit(0);
-                    }
+                    throw new Exception("Chess notation file is not trusted.");
                 }
             }
         }
         ChessNotation.setMovesList(cacheNotation);
     }
 
-    private void loadComputer(File dir) {
+    private void loadComputer() throws Exception {
         try {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/computer.txt";
@@ -163,12 +165,7 @@ public class LoadGame {
             long crc = Long.parseLong(sc.next());
             boolean isCRCcorrect = CRCcheck(strSkill.getBytes(), crc);
             if(!isCRCcorrect){
-                try {
-                    throw new Exception("Computer file is not trusted.");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    System.exit(0);
-                }
+                throw new Exception("Computer file is not trusted.");
             }
             Computer.setSkill(Integer.parseInt(strSkill));
         } catch (IOException e) {
@@ -176,7 +173,7 @@ public class LoadGame {
         }
     }
 
-    private void loadStatistics(File dir) {
+    private void loadStatistics() throws Exception {
 
         try {
             String filePath = dir.getAbsolutePath();
@@ -199,12 +196,7 @@ public class LoadGame {
             long crc = Long.parseLong(s.next());
             boolean isCRCcorrect = CRCcheck(buffer.getBytes(), crc);
             if(!isCRCcorrect){
-                try {
-                    throw new Exception("Statistics file is not trusted.");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                    System.exit(0);
-                }
+                throw new Exception("Statistics file is not trusted.");
             }
 
         } catch (IOException e) {

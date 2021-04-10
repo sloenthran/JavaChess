@@ -16,7 +16,7 @@ import java.util.zip.CRC32;
 
 public class SaveGame {
 
-    File selectedDir;
+    private File selectedDir;
 
     public void save(){
         DirectoryChooser dirChooser = new DirectoryChooser();
