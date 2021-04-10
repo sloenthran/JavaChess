@@ -41,7 +41,7 @@ public class EndGame {
     }
 
     public void newGame() {
-        saveGame.remove();
+        //saveGame.remove();
         restartApplication();
     }
 
