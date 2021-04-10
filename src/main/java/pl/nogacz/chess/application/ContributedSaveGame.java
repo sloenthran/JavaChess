@@ -79,7 +79,7 @@ public class ContributedSaveGame {
             String filePath = dir.getAbsolutePath();
             filePath = filePath + "/computer.txt";
             PrintWriter writer = new PrintWriter(filePath);
-            writer.println(Computer.getSkill());
+            writer.println(String.valueOf(Computer.getSkill()));
             buffer = String.valueOf(Computer.getSkill());
             long crc = computeCRC(buffer.getBytes());
             writer.println(crc);
