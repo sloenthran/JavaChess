@@ -8,7 +8,6 @@ import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.PawnClass;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,95 +16,90 @@ import java.util.zip.CRC32;
 
 public class SaveGame {
 
+    File selectedDir;
+
     public void save(){
         DirectoryChooser dirChooser = new DirectoryChooser();
-
         dirChooser.setTitle("Select location");
+        this.selectedDir = dirChooser.showDialog(new Stage());
+        saveToDirectory(selectedDir);
+    }
 
-        File selectedDir = dirChooser.showDialog(new Stage());
-        if(selectedDir != null) {
-            saveBoard(selectedDir);
-            saveChessNotation(selectedDir);
-            saveComputer(selectedDir);
-            saveStatistics(selectedDir);
+    public void saveToDirectory(File dir) throws FileNotFoundException {
+        if(dir != null) {
+            saveBoard();
+            saveChessNotation();
+            saveComputer();
+            saveStatistics();
         }
     }
-    private void saveBoard(File dir){
-        String filePath = dir.getAbsolutePath();
+
+
+    private void saveBoard() throws FileNotFoundException {
+        String filePath = selectedDir.getAbsolutePath();
         filePath = filePath + "/board.txt";
         String buffer = "";
-        try {
-            PrintWriter out = new PrintWriter(filePath);
-            HashMap<Coordinates, PawnClass> board = Board.getBoard();
-            for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
-                String coordinates = entry.getKey().getX() + "," +  entry.getKey().getY() + ",";
-                String man = board.get(entry.getKey()).getColor() + "," + board.get(entry.getKey()).getPawn();
-                String line = coordinates + man;
-                buffer += line;
-                out.println(line);
-            }
-            long crc = computeCRC(buffer.getBytes());
-            out.println(crc);
-            out.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+
+        PrintWriter out = new PrintWriter(filePath);
+        HashMap<Coordinates, PawnClass> board = Board.getBoard();
+        for(Map.Entry<Coordinates, PawnClass> entry : board.entrySet()) {
+            String coordinates = entry.getKey().getX() + "," +  entry.getKey().getY() + ",";
+            String man = board.get(entry.getKey()).getColor() + "," + board.get(entry.getKey()).getPawn();
+            String line = coordinates + man;
+            buffer += line;
+            out.println(line);
         }
+        long crc = computeCRC(buffer.getBytes());
+        out.println(crc);
+        out.close();
+
 
     }
 
-    private void saveChessNotation(File dir) {
-        String filePath = dir.getAbsolutePath();
+    private void saveChessNotation() throws FileNotFoundException {
+        String filePath = selectedDir.getAbsolutePath();
         filePath = filePath + "/chessNotation.txt";
         String buffer = "";
-        try {
-            PrintWriter out = new PrintWriter(filePath);
-            ArrayList<String> list = (ArrayList<String>) ChessNotation.getMovesList();
-           for(int i =0; i<list.size();i++){
-               buffer += list.get(i);
-               out.println(list.get(i));
-           }
+        PrintWriter out = new PrintWriter(filePath);
+        ArrayList<String> list = (ArrayList<String>) ChessNotation.getMovesList();
+       for(int i =0; i<list.size();i++){
+           buffer += list.get(i);
+           out.println(list.get(i));
+       }
 
-           long crc = computeCRC(buffer.getBytes());
-           out.println(crc);
-           out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       long crc = computeCRC(buffer.getBytes());
+       out.println(crc);
+       out.close();
+
     }
 
-    private void saveComputer(File dir) {
+    private void saveComputer() throws FileNotFoundException {
         String buffer = "";
-        try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/computer.txt";
-            PrintWriter writer = new PrintWriter(filePath);
-            writer.println(String.valueOf(Computer.getSkill()));
-            buffer = String.valueOf(Computer.getSkill());
-            long crc = computeCRC(buffer.getBytes());
-            writer.println(crc);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String filePath = selectedDir.getAbsolutePath();
+        filePath = filePath + "/computer.txt";
+        PrintWriter writer = new PrintWriter(filePath);
+        writer.println(String.valueOf(Computer.getSkill()));
+        buffer = String.valueOf(Computer.getSkill());
+        long crc = computeCRC(buffer.getBytes());
+        writer.println(crc);
+        writer.flush();
+        writer.close();
+
     }
 
-    private void saveStatistics(File dir) {
+    private void saveStatistics() throws FileNotFoundException {
         String stats = "Game win:" + Statistics.getGameWin() + "\n" +
                         "Game loss:" + Statistics.getGameLoss() + "\n"+
                         "Game draw:" + Statistics.getGameDraw();
-        try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/statistics.txt";
-            PrintWriter writer = new PrintWriter(filePath);
-            writer.println(stats);
-            long crc = computeCRC(stats.getBytes());
-            writer.println(crc);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String filePath = selectedDir.getAbsolutePath();
+        filePath = filePath + "/statistics.txt";
+        PrintWriter writer = new PrintWriter(filePath);
+        writer.println(stats);
+        long crc = computeCRC(stats.getBytes());
+        writer.println(crc);
+        writer.flush();
+        writer.close();
+
     }
 
     private long computeCRC(byte[] byteArr){
