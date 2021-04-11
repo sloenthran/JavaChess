@@ -9,12 +9,11 @@ import pl.nogacz.chess.board.Coordinates;
 import pl.nogacz.chess.pawns.Pawn;
 import pl.nogacz.chess.pawns.PawnClass;
 import pl.nogacz.chess.pawns.PawnColor;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,7 @@ public class LoadGame {
         }
     }
 
-    public void loadFromDirectory(File selectedDir) throws Exception {
+    public void loadFromDirectory(File selectedDir) throws FileNotFoundException,IllegalStateException {
         this.dir = selectedDir;
         if(selectedDir != null) {
             loadBoard();
@@ -49,16 +48,12 @@ public class LoadGame {
 
     }
 
-    private void loadBoard() throws Exception {
+    private void loadBoard() throws FileNotFoundException, IllegalStateException {
         Board.clearBoard();
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/board.txt";
         Scanner sc = null;
-        try {
-            sc = new Scanner(new FileInputStream(filePath));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        sc = new Scanner(new FileInputStream(filePath));
         HashMap<Coordinates, PawnClass> cacheMap = new HashMap<>();
         String buffer = "";
         while(sc.hasNext()){
@@ -118,7 +113,7 @@ public class LoadGame {
             }else{
                 boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
-                    throw new Exception("Board file is not trusted.");
+                    throw new IllegalStateException("Board file is not trusted.");
                 }
             }
 
@@ -129,15 +124,11 @@ public class LoadGame {
         Board.redesignBoard();
     }
 
-    private void loadChessNotation() throws Exception {
+    private void loadChessNotation() throws IllegalStateException, FileNotFoundException {
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/chessNotation.txt";
         Scanner sc = null;
-        try {
-            sc = new Scanner(new FileInputStream(filePath)).useDelimiter("\n");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        sc = new Scanner(new FileInputStream(filePath)).useDelimiter("\n");
         List<String> cacheNotation= new ArrayList<>();
         String buffer = "";
         while(sc.hasNext()){
@@ -149,59 +140,54 @@ public class LoadGame {
             else{
                 boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
-                    throw new Exception("Chess notation file is not trusted.");
+                    throw new IllegalStateException("Chess notation file is not trusted.");
                 }
             }
         }
         ChessNotation.setMovesList(cacheNotation);
     }
 
-    private void loadComputer() throws Exception {
-        try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/computer.txt";
-            Scanner sc = new Scanner(new File(filePath));
-            String strSkill = sc.next();
-            long crc = Long.parseLong(sc.next());
-            boolean isCRCcorrect = CRCcheck(strSkill.getBytes(), crc);
-            if(!isCRCcorrect){
-                throw new Exception("Computer file is not trusted.");
-            }
-            Computer.setSkill(Integer.parseInt(strSkill));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void loadComputer() throws IllegalStateException, FileNotFoundException {
+        String filePath = dir.getAbsolutePath();
+        filePath = filePath + "/computer.txt";
+        Scanner sc = new Scanner(new File(filePath));
+        String strSkill = sc.next();
+        long crc = Long.parseLong(sc.next());
+        boolean isCRCcorrect = CRCcheck(strSkill.getBytes(), crc);
+        if(!isCRCcorrect){
+            throw new IllegalStateException("Computer file is not trusted.");
         }
+        Computer.setSkill(Integer.parseInt(strSkill));
+
     }
 
-    private void loadStatistics() throws Exception {
+    private void loadStatistics() throws IllegalStateException, FileNotFoundException {
 
-        try {
-            String filePath = dir.getAbsolutePath();
-            filePath = filePath + "/statistics.txt";
-            String buffer;
-            Scanner s = new Scanner(new File(filePath)).useDelimiter("\n");
-            String gamewin = s.next();
-            buffer = gamewin + "\n";
-            gamewin = gamewin.substring(gamewin.indexOf(':')+1);
-            Statistics.setGameWin(Integer.parseInt(gamewin));
-            String gameloss = s.next();
-            buffer = buffer + gameloss + "\n";
-            gameloss = gameloss.substring(gameloss.indexOf(':')+1);
-            Statistics.setGameLoss(Integer.parseInt(gameloss));
-            String gamedraw = s.next();
-            buffer = buffer + gamedraw ;
-            gamedraw = gamedraw.substring(gamedraw.indexOf(':')+1);
-            Statistics.setGameDraw(Integer.parseInt(gamedraw));
 
-            long crc = Long.parseLong(s.next());
-            boolean isCRCcorrect = CRCcheck(buffer.getBytes(), crc);
-            if(!isCRCcorrect){
-                throw new Exception("Statistics file is not trusted.");
-            }
+        String filePath = dir.getAbsolutePath();
+        filePath = filePath + "/statistics.txt";
+        String buffer;
+        Scanner s = new Scanner(new File(filePath)).useDelimiter("\n");
+        String gamewin = s.next();
+        buffer = gamewin + "\n";
+        gamewin = gamewin.substring(gamewin.indexOf(':')+1);
+        Statistics.setGameWin(Integer.parseInt(gamewin));
+        String gameloss = s.next();
+        buffer = buffer + gameloss + "\n";
+        gameloss = gameloss.substring(gameloss.indexOf(':')+1);
+        Statistics.setGameLoss(Integer.parseInt(gameloss));
+        String gamedraw = s.next();
+        buffer = buffer + gamedraw ;
+        gamedraw = gamedraw.substring(gamedraw.indexOf(':')+1);
+        Statistics.setGameDraw(Integer.parseInt(gamedraw));
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        long crc = Long.parseLong(s.next());
+        boolean isCRCcorrect = CRCcheck(buffer.getBytes(), crc);
+        if(!isCRCcorrect){
+            throw new IllegalStateException("Statistics file is not trusted.");
         }
+
+
     }
 
     private boolean CRCcheck(byte[] byteArr1, long crc){
