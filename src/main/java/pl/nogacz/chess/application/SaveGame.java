@@ -43,7 +43,7 @@ public class SaveGame {
     private void saveBoard() throws FileNotFoundException {
         String filePath = selectedDir.getAbsolutePath();
         filePath = filePath + "/board.txt";
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
 
         PrintWriter out = new PrintWriter(filePath);
         HashMap<Coordinates, PawnClass> board = Board.getBoard();
@@ -51,10 +51,10 @@ public class SaveGame {
             String coordinates = entry.getKey().getX() + "," +  entry.getKey().getY() + ",";
             String man = board.get(entry.getKey()).getColor() + "," + board.get(entry.getKey()).getPawn();
             String line = coordinates + man;
-            buffer += line;
+            buffer.append(line);
             out.println(line);
         }
-        long crc = computeCRC(buffer.getBytes());
+        long crc = computeCRC(buffer.toString().getBytes());
         out.println(crc);
         out.close();
 
@@ -64,26 +64,26 @@ public class SaveGame {
     private void saveChessNotation() throws FileNotFoundException {
         String filePath = selectedDir.getAbsolutePath();
         filePath = filePath + "/chessNotation.txt";
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         PrintWriter out = new PrintWriter(filePath);
         ArrayList<String> list = (ArrayList<String>) ChessNotation.getMovesList();
-       for(int i =0; i<list.size();i++){
-           buffer += list.get(i);
-           out.println(list.get(i));
-       }
+        for (String s : list) {
+            buffer.append(s);
+            out.println(s);
+        }
 
-       long crc = computeCRC(buffer.getBytes());
+       long crc = computeCRC(buffer.toString().getBytes());
        out.println(crc);
        out.close();
 
     }
 
     private void saveComputer() throws FileNotFoundException {
-        String buffer = "";
+        String buffer;
         String filePath = selectedDir.getAbsolutePath();
         filePath = filePath + "/computer.txt";
         PrintWriter writer = new PrintWriter(filePath);
-        writer.println(String.valueOf(Computer.getSkill()));
+        writer.println(Computer.getSkill());
         buffer = String.valueOf(Computer.getSkill());
         long crc = computeCRC(buffer.getBytes());
         writer.println(crc);

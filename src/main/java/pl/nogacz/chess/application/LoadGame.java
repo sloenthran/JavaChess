@@ -28,8 +28,7 @@ public class LoadGame {
 
         dirChooser.setTitle("Choose location");
 
-        File selectedDir = dirChooser.showDialog(new Stage());
-        this.dir = selectedDir;
+        this.dir = dirChooser.showDialog(new Stage());
         try {
             loadFromDirectory(dir);
         } catch (Exception e) {
@@ -52,14 +51,14 @@ public class LoadGame {
         Board.clearBoard();
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/board.txt";
-        Scanner sc = null;
+        Scanner sc;
         sc = new Scanner(new FileInputStream(filePath));
         HashMap<Coordinates, PawnClass> cacheMap = new HashMap<>();
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         while(sc.hasNext()){
             String line = sc.next();
             if(line.contains(",")) {
-                buffer += line;
+                buffer.append(line);
                 String[] tokens = line.split(",");
                 int Xcoordinate = Integer.parseInt(tokens[0]);
                 int Ycoordinate = Integer.parseInt(tokens[1]);
@@ -111,7 +110,7 @@ public class LoadGame {
 
                 }
             }else{
-                boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
+                boolean isCRCcorrect = CRCcheck(buffer.toString().getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
                     throw new IllegalStateException("Board file is not trusted.");
                 }
@@ -127,18 +126,18 @@ public class LoadGame {
     private void loadChessNotation() throws IllegalStateException, FileNotFoundException {
         String filePath = dir.getAbsolutePath();
         filePath = filePath + "/chessNotation.txt";
-        Scanner sc = null;
+        Scanner sc;
         sc = new Scanner(new FileInputStream(filePath)).useDelimiter("\n");
         List<String> cacheNotation= new ArrayList<>();
-        String buffer = "";
+        StringBuilder buffer = new StringBuilder();
         while(sc.hasNext()){
             String line = sc.next();
             if(line.contains(" ")) {
-                buffer += line;
+                buffer.append(line);
                 cacheNotation.add(line);
             }
             else{
-                boolean isCRCcorrect = CRCcheck(buffer.getBytes(), Long.parseLong(line));
+                boolean isCRCcorrect = CRCcheck(buffer.toString().getBytes(), Long.parseLong(line));
                 if(!isCRCcorrect){
                     throw new IllegalStateException("Chess notation file is not trusted.");
                 }
